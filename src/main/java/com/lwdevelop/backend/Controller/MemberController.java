@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lwdevelop.backend.Entity.Member;
-import com.lwdevelop.backend.Repository.MemberRepository;
 import com.lwdevelop.backend.Service.MemberService;
 
 @RestController
@@ -24,18 +23,16 @@ import com.lwdevelop.backend.Service.MemberService;
 public class MemberController {
 
     @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
     private MemberService memberService;
     
     @GetMapping("/members")
     public Collection<Member> members() {
-        return memberRepository.findAll();
+        return memberService.findAll();
     }
     
     @GetMapping("/member/{id}")
     public ResponseEntity<?> getMember(@PathVariable Long id) {
-        Optional<Member> member = memberRepository.findById(id);
+        Optional<Member> member = memberService.findById(id);
         return member.map(response -> ResponseEntity.ok().body(response))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -48,13 +45,13 @@ public class MemberController {
 
     @PutMapping("/member/{id}")
     public ResponseEntity<Member> updateMember(@RequestBody Member member) {
-        Member result = memberRepository.save(member);
+        Member result = memberService.save(member);
         return ResponseEntity.ok().body(result);
     }
     
     @DeleteMapping("/member/{id}")
     public ResponseEntity<?> deleteMember(@PathVariable Long id){
-        memberRepository.deleteById(id);
+        memberService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
