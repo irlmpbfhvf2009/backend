@@ -30,7 +30,7 @@ public class MemberController {
         return memberService.findAll();
     }
     @GetMapping("/test")
-    public Collection<Member> members() {
+    public ResponseEntity<?> test() {
         return ResponseEntity.ok().body("test");
     }
     
