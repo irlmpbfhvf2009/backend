@@ -29,6 +29,10 @@ public class MemberController {
     public Collection<Member> members() {
         return memberService.findAll();
     }
+    @GetMapping("/test")
+    public Collection<Member> members() {
+        return ResponseEntity.ok().body("test");
+    }
     
     @GetMapping("/member/{id}")
     public ResponseEntity<?> getMember(@PathVariable Long id) {
