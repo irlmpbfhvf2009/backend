@@ -31,6 +31,11 @@ public class MemberController {
     }
     @GetMapping("/test")
     public ResponseEntity<?> test() {
+        Member member = new Member();
+		member.setEmail("email");
+		member.setPassword("password");
+		member.setName("name");
+		memberService.save(member);
         return ResponseEntity.ok().body("test");
     }
     
