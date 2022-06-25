@@ -36,7 +36,7 @@ public class WebSocketServer {
           this.sid = sid;
           addOnlineCount();           //線上數加1
           try {
-              sendMessage("conn_success");
+            sendMessage("conn_success");
               log.info("有新視窗開始監聽:" + sid + ",當前線上人數為:" + getOnlineCount());
           } catch (IOException e) {
               log.error("websocket IO Exception");
