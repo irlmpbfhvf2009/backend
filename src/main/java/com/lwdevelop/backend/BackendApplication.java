@@ -2,9 +2,7 @@ package com.lwdevelop.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableScheduling // 定時任務
 @SpringBootApplication
 public class BackendApplication {
 
