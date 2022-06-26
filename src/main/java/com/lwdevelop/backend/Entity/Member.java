@@ -31,6 +31,8 @@ public class Member implements UserDetails {
 
     
     private String email;
+    
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false,length = 30)
@@ -52,9 +54,6 @@ public class Member implements UserDetails {
     
     @LastModifiedDate
     private Date updateTime;
-
-
-    public Object getPassword;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
