@@ -37,7 +37,7 @@
 		//連線成功建立的回撥方法
 		websocket.onopen = function() {
 			setMessageInnerHTML("WebSocket連線成功");
-			websocket.send("新訪客加入聊天");
+			websocket.send("訪客加入聊天");
 		}
 		var U01data, Uidata, Usdata
 		//接收到訊息的回撥方法
