@@ -1,3 +1,5 @@
+
+/**
 package com.lwdevelop.backend;
 
 import org.springframework.context.annotation.Bean;
@@ -11,9 +13,6 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
-/**
- * Swagger配置类
- */
 @Configuration
 @EnableOpenApi
 public class SwaggerConfig {
@@ -21,7 +20,7 @@ public class SwaggerConfig {
     @Bean
     Docket docket() {
         return new Docket(DocumentationType.OAS_30)
-                .groupName("·R¤ä¥IAPI¤å¥ó")
+                .groupName("test")
                 .pathMapping("/")
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
@@ -37,3 +36,5 @@ public class SwaggerConfig {
             .build();
     }
 }
+
+*/
