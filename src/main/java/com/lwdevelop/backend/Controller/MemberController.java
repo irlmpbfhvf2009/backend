@@ -26,7 +26,6 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-
     @ApiOperation("註冊")
     @PostMapping(path = "/register")
     public ResponseEntity<String> register(
