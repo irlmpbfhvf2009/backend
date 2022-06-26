@@ -1,4 +1,5 @@
 package com.lwdevelop.backend.WebSocket;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,22 +11,22 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @Controller("web_Scoket_system")
 @RequestMapping("/api/socket")
 public class SystemController {
-        //頁面請求
-        @GetMapping("/index/{userId}")
-        public ModelAndView socket(@PathVariable String userId) {
-            ModelAndView mav = new ModelAndView("/socket1");
-            mav.addObject("userId", userId);
-            return mav;
-        }
-            //推送資料介面
+    // 頁面請求
+    @GetMapping("/index/{userId}")
+    public ModelAndView socket(@PathVariable String userId) {
+        ModelAndView mav = new ModelAndView("/socket1");
+        mav.addObject("userId", userId);
+        return mav;
+    }
+
+    // 推送資料介面
     @ResponseBody
     @RequestMapping("/socket/push/{cid}")
-    public Map<String,Object> pushToWeb(@PathVariable String cid, String message) {
-        Map<String,Object> result = new HashMap<>();
+    public Map<String, Object> pushToWeb(@PathVariable String cid, String message) {
+        Map<String, Object> result = new HashMap<>();
         try {
             WebSocketServer.sendInfo(message, cid);
             result.put("code", cid);
