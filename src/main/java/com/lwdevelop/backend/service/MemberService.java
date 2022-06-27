@@ -51,13 +51,24 @@ public class MemberService {
         String username = memberVO.getUsername();
 
 		if (!StringUtils.hasText(email)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("信箱不可為空!");
+            log.info("MemberService ==> register ........... [ 信箱不可為空 ]");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("信箱不可為空");
 		}
 		if (!StringUtils.hasText(password)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("密碼不可為空!");
+            log.info("MemberService ==> register ........... [ 密碼不可為空 ]");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("密碼不可為空");
 		}
 		if (!StringUtils.hasText(username)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用户名不可為空!");
+            log.info("MemberService ==> register ........... [ 用户名不可為空 ]");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用户名不可為空");
+		}
+        if(password.length()<7){
+            log.info("MemberService ==> register ........... [ 密碼長度不足 ]");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("密碼長度不足");
+        }
+        if (email.contains("@")||email.contains(".com") || email.split("@")[0].length()<1 ||email.split("@")[1].length()<4) {
+            log.info("MemberService ==> register ........... [ 信箱格式錯誤 ]");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("信箱格式錯誤");
 		}
 
         log.info("MemberService ==> register ... 檢查會員是否已經存在 [" + email + "]");
@@ -66,6 +77,7 @@ public class MemberService {
 		if (memberEmail != null) 
 		{
 			log.info("MemberService ==> register ... 會員已經存在！");
+            log.info("MemberService ==> register ........... [ 用戶名稱已經存在 ]");
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用戶名稱已經存在");
 		}
 
@@ -103,22 +115,27 @@ public class MemberService {
     public ResponseEntity<String> memberLogin(HttpServletRequest request, MemberLoginVO memberLogin) {
         if (!StringUtils.hasText(memberLogin.getEmail())) 
 		{
+            log.info("MemberService ==> memberLogin ........... [ 未輸入帳號 ]");
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("未輸入帳號");
 		}
         if (!StringUtils.hasText(memberLogin.getPassword())) 
 		{
+            log.info("MemberService ==> memberLogin ........... [ 未輸入密碼 ]");
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("未輸入密碼");
 		}
 
 
         Member member = findByEmail(memberLogin.getEmail());
         if(member == null){
+            log.info("MemberService ==> memberLogin ........... [ 查無此會員 ]");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("查無此會員");
         }
         if(!member.getEnable()){
+            log.info("MemberService ==> memberLogin ........... [ 此帳號被停用 ]");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("此帳號被停用");
         }
-        if(!member.getPassword().equals(memberLogin.getPassword())){
+        if(!memberLogin.getPassword().equals(memberLogin.getPassword())){
+            log.info("MemberService ==> memberLogin ........... [ 密碼錯誤 ]");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("密碼錯誤");
         }
 
@@ -133,7 +150,7 @@ public class MemberService {
             member.setLastLoginIP(CommUtils.getClientIP(request));
             member.setPlatform(CommUtils.getClientDevice(request));
             save(member);
-            
+            log.info("MemberService ==> memberLogin ........... [ 登入成功 ]");
             return ResponseEntity.ok().body("登入成功");
 
         } catch (Exception e) {
