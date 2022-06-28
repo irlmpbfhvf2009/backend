@@ -66,7 +66,7 @@ public class MemberService {
             log.info("MemberService ==> register ........... [ 密碼長度不足 ]");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("密碼長度不足");
         }
-        if (email.contains("@")||email.contains(".com")) {
+        if (!email.contains("@")||!email.contains(".com")) {
             log.info("MemberService ==> register ........... [ 信箱格式錯誤 ]");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("信箱格式錯誤");
 		}
