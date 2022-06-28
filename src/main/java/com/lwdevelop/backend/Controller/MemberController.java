@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.vo.MemberLoginVO;
 import com.lwdevelop.backend.vo.MemberVO;
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-//@Api(tags = "會員")
+@Api(tags = "用戶接口")
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api")
@@ -25,23 +25,27 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    //@ApiOperation("註冊")
+    @ApiOperation("註冊")
+   /*  @ApiImplicitParams({
+        @ApiImplicitParam(name = "memberVO", value = "用戶實體類", paramType = "body", dataType = "MemberVO", required = true)}) */
     @PostMapping(path = "/register")
-    public ResponseEntity<String> register(
+    public ResponseEntity<ResponseEntity<String>> register(
                                     HttpServletRequest request, 
-                                    @RequestBody MemberVO memberVO) {
+                                    @RequestBody MemberVO memberVO) throws Exception{
         log.info("MemberController ==> register ........... 會員註冊：" + memberVO.toString());
-        return memberService.register(request, memberVO);
+        return ResponseEntity.ok(memberService.register(request, memberVO));
     }
-    //@ApiOperation("登入")
+    @ApiOperation("登入")
+/*     @ApiImplicitParams({
+        @ApiImplicitParam(name = "memberLogin", value = "用戶實體類", paramType = "body", dataType = "MemberLoginVO", required = true)}) */
     @PostMapping(path = "/login")
-    public ResponseEntity<String> memberLogin(HttpServletRequest request, @RequestBody MemberLoginVO memberLogin)
-    {
+    public ResponseEntity<ResponseEntity<String>> memberLogin(HttpServletRequest request, 
+                                    @RequestBody MemberLoginVO memberLogin)throws Exception{
     	if (memberLogin == null) {
             return null;
         }
     	log.info("MemberController ==> memberLogin ........... 會員登入 [" + memberLogin.getEmail() + "]");
-        return memberService.memberLogin(request, memberLogin);
+        return ResponseEntity.ok(memberService.memberLogin(request, memberLogin));
     }
     
 

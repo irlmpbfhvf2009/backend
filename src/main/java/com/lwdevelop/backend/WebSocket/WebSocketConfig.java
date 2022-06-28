@@ -1,4 +1,4 @@
-package com.lwdevelop.backend.WebSocket;
+/* package com.lwdevelop.backend.WebSocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,3 +11,4 @@ public class WebSocketConfig {
         return new ServerEndpointExporter();
     }
 }
+ */

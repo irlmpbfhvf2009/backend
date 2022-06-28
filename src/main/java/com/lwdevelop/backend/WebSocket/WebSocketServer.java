@@ -1,6 +1,6 @@
 package com.lwdevelop.backend.WebSocket;
 
-import lombok.extern.slf4j.Slf4j;
+/* import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +26,6 @@ public class WebSocketServer {
     // 接收sid
     private String sid = "";
 
-    /**
-     * 連線建立成功呼叫的方法
-     */
     @OnOpen
     public void onOpen(Session session, @PathParam("sid") String sid) {
         this.session = session;
@@ -42,10 +39,6 @@ public class WebSocketServer {
             log.error("websocket IO Exception");
         }
     }
-
-    /**
-     * 連線關閉呼叫的方法
-     */
     @OnClose
     public void onClose(Session session) {
         this.session = session;
@@ -60,10 +53,6 @@ public class WebSocketServer {
 
     }
 
-    /**
-     * 收到客戶端訊息後呼叫的方法
-     * @ Param message 客戶端傳送過來的訊息
-     */
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("收到來自視窗" + sid + "的資訊:" + message);
@@ -77,26 +66,16 @@ public class WebSocketServer {
         }
     }
 
-    /**
-     * @ Param session
-     * @ Param error
-     */
     @OnError
     public void onError(Session session, Throwable error) {
         log.error("發生錯誤");
         error.printStackTrace();
     }
 
-    /**
-     * 實現伺服器主動推送
-     */
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
     }
 
-    /**
-     * 群發自定義訊息
-     */
     public static void sendInfo(String message, @PathParam("sid") String sid) throws IOException {
         log.info("推送訊息到視窗" + sid + "，推送內容:" + message);
 
@@ -130,3 +109,4 @@ public class WebSocketServer {
         return webSocketSet;
     }
 }
+ */

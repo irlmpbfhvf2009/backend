@@ -1,4 +1,4 @@
-package com.lwdevelop.backend.WebSocket;
+/* package com.lwdevelop.backend.WebSocket;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,3 +37,4 @@ public class SystemController {
         return result;
     }
 }
+ */
