@@ -42,8 +42,6 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/static/**").permitAll()
-                .antMatchers("/test/test/**").permitAll()
-                .antMatchers("/test/**").permitAll()
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/admin/login").permitAll()
