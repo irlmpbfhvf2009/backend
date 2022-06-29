@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -25,9 +24,8 @@ import lombok.Data;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Member implements UserDetails {
-//public class Member {
-
+public class Admin implements UserDetails {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -57,15 +55,9 @@ public class Member implements UserDetails {
     @LastModifiedDate
     private Date updateTime;
 
-    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(s -> new SimpleGrantedAuthority(s)).collect(Collectors.toList());
-    }
-
-    @Override
-    public String getUsername() {
-        return getEmail();
+        return  roles.stream().map(s -> new SimpleGrantedAuthority(s)).collect(Collectors.toList());
     }
 
     @Override

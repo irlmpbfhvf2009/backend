@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.lwdevelop.backend.security.JWTUtil;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.vo.MemberLoginVO;
@@ -45,7 +44,6 @@ public class MemberController {
     public ResponseEntity<String> login(@RequestBody HashMap <String, String> user) {
         JWTUtil jwtToken = new JWTUtil();
         String token = jwtToken.generateToken(user); // 取得token
-    
         return ResponseEntity.status(HttpStatus.OK).body(token);
        }
 
@@ -58,6 +56,7 @@ public class MemberController {
     	if (memberLogin == null) {
             return null;
         }
+        
     	log.info("MemberController ==> memberLogin ........... 會員登入 [" + memberLogin.getEmail() + "]");
         return ResponseEntity.status(HttpStatus.OK).body(memberService.memberLogin(request, memberLogin));
     }

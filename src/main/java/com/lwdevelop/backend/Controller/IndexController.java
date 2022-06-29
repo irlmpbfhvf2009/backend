@@ -10,9 +10,10 @@ import io.swagger.annotations.ApiOperation;
 @Controller
 public class IndexController {
 
-    @ApiOperation("跳轉index.html")
+    @ApiOperation("跳轉首頁")
     @RequestMapping("/")
     public String Index() {
         return "index"; // 这个就显示跳转到了index.html, 注意是templates下面的
     }
+
 }

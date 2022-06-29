@@ -15,6 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
 @Configuration
 @EnableWebSecurity	// 添加 security 过滤器
 @EnableGlobalMethodSecurity(prePostEnabled = true)	// 启用方法级别的权限认证
@@ -41,6 +42,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/static/**").permitAll()
+                .antMatchers("/test/test/**").permitAll()
+                .antMatchers("/test/**").permitAll()
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/admin/login").permitAll()
@@ -53,10 +56,8 @@ public class SecurityConfig {
                 .build();
     }
 
-    /**
-     * 配置跨源访问(CORS)
-     * @return
-     */
+
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
