@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkfrontend"]=self["webpackChunkfrontend"]||[]).push([[178],{8178:function(n,e,r){function t(n,e,r,t,u,a){return null}r.r(e),r.d(e,{default:function(){return c}});var u={name:"Home",props:{}},a=r(89);const o=(0,a.Z)(u,[["render",t],["__scopeId","data-v-64aea19e"]]);var c=o}}]);
-//# sourceMappingURL=178.2ce5aa23.js.map
