@@ -1,4 +1,4 @@
-package com.lwdevelop.backend.utils;
+/* package com.lwdevelop.backend.utils;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -23,14 +23,10 @@ import io.jsonwebtoken.UnsupportedJwtException;
 public class JwtTokenUtils  implements Serializable {
     
     private static final long EXPIRATION_TIME = 1 * 60 * 1000;
-    /**
-     * JWT SECRET KEY
-     */
+
     private static final String SECRET = "learn to dance in the rain";
 
-    /**
-     * 簽發JWT
-     */
+    
     public String generateToken(HashMap<String, String> userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put( "userName", userDetails.get("userName") );
@@ -42,9 +38,7 @@ public class JwtTokenUtils  implements Serializable {
                 .compact();
     }
 
-    /**
-     * 驗證JWT
-     */
+    
     public void validateToken(String token) throws AuthException {
         try {
             Jwts.parser()
@@ -70,4 +64,4 @@ public class JwtTokenUtils  implements Serializable {
     public String generateToken(MemberLoginVO memberLogin) {
         return null;
     }
-}
+} */

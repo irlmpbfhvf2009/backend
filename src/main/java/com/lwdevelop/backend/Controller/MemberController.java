@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.lwdevelop.backend.service.MemberService;
-import com.lwdevelop.backend.utils.JwtTokenUtils;
 import com.lwdevelop.backend.vo.MemberLoginVO;
 import com.lwdevelop.backend.vo.MemberVO;
 import io.swagger.annotations.Api;
@@ -45,8 +44,8 @@ public class MemberController {
     	if (memberLogin == null) {
             return null;
         }
-        JwtTokenUtils jwtToken = new JwtTokenUtils();
-        String token = jwtToken.generateToken(memberLogin);
+        /* JwtTokenUtils jwtToken = new JwtTokenUtils();
+        String token = jwtToken.generateToken(memberLogin); */
     	log.info("MemberController ==> memberLogin ........... 會員登入 [" + memberLogin.getEmail() + "]");
         return ResponseEntity.ok(memberService.memberLogin(request, memberLogin));
     }
