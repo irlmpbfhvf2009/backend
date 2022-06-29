@@ -10,11 +10,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig {
+public class SecurityConfig  {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         //省略HttpSecurity的配置
-        return httpSecurity.build();
+        return httpSecurity
+                /* .authorizeHttpRequests()
+                .antMatchers("/")
+                .permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .and() */
+                .build();
     }
   }
