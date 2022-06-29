@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkfrontend"]=self["webpackChunkfrontend"]||[]).push([[335],{6335:function(n,e,r){function t(n,e,r,t,u,c){return null}r.r(e),r.d(e,{default:function(){return o}});var u={name:"WebSocket.vue",props:{}},c=r(89);const f=(0,c.Z)(u,[["render",t]]);var o=f}}]);
+//# sourceMappingURL=335.1b0a7abe.js.map

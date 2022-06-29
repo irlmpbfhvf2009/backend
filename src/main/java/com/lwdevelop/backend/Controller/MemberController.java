@@ -1,13 +1,18 @@
 package com.lwdevelop.backend.controller;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.lwdevelop.backend.security.JWTUtil;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.vo.MemberLoginVO;
 import com.lwdevelop.backend.vo.MemberVO;
@@ -19,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Api(tags = "用戶接口")
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api")
+@RequestMapping("/user")
 public class MemberController {
 
     @Autowired
@@ -33,8 +38,17 @@ public class MemberController {
                                     HttpServletRequest request, 
                                     @RequestBody MemberVO memberVO) throws Exception{
         log.info("MemberController ==> register ........... 會員註冊：" + memberVO.toString());
-        return ResponseEntity.ok(memberService.register(request, memberVO));
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.register(request, memberVO));
     }
+
+    @PostMapping("/token")
+    public ResponseEntity<String> login(@RequestBody HashMap <String, String> user) {
+        JWTUtil jwtToken = new JWTUtil();
+        String token = jwtToken.generateToken(user); // 取得token
+    
+        return ResponseEntity.status(HttpStatus.OK).body(token);
+       }
+
     @ApiOperation("登入")
 /*     @ApiImplicitParams({
         @ApiImplicitParam(name = "memberLogin", value = "用戶實體類", paramType = "body", dataType = "MemberLoginVO", required = true)}) */
@@ -44,10 +58,8 @@ public class MemberController {
     	if (memberLogin == null) {
             return null;
         }
-        /* JwtTokenUtils jwtToken = new JwtTokenUtils();
-        String token = jwtToken.generateToken(memberLogin); */
     	log.info("MemberController ==> memberLogin ........... 會員登入 [" + memberLogin.getEmail() + "]");
-        return ResponseEntity.ok(memberService.memberLogin(request, memberLogin));
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.memberLogin(request, memberLogin));
     }
     
 

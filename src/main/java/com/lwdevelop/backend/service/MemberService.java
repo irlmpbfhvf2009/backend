@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -88,8 +89,7 @@ public class MemberService {
         try{
             log.info("MemberService ==> register ... 建立新會員");
             Member member = new Member();
-            List<String> roles = Arrays.asList(new String[] { "ROLE_USER" });
-
+            List<String> roles = Arrays.asList(new String[] { "USER" });
             member.setEmail(email);
             member.setPassword(password);
             member.setUsername(username);
@@ -106,7 +106,7 @@ public class MemberService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("註冊失敗");
         }
 
-        return ResponseEntity.ok().body("註冊成功");
+        return ResponseEntity.status(HttpStatus.OK).body("註冊成功");
     }
 
     /*
@@ -151,7 +151,7 @@ public class MemberService {
             member.setPlatform(CommUtils.getClientDevice(request));
             save(member);
             log.info("MemberService ==> memberLogin ........... [ 登入成功 ]");
-            return ResponseEntity.ok().body("登入成功");
+            return ResponseEntity.status(HttpStatus.OK).body("登入成功");
 
         } catch (Exception e) {
             log.info("Member237Service ==> memberLogin Exception: " + e.toString());
