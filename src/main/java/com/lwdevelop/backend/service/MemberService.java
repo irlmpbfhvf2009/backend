@@ -7,19 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import com.lwdevelop.backend.entity.Member;
 import com.lwdevelop.backend.repository.MemberRepository;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.utils.CommUtils;
 import com.lwdevelop.backend.vo.MemberLoginVO;
 import com.lwdevelop.backend.vo.MemberVO;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -113,7 +116,7 @@ public class MemberService  implements UserDetailsService{
     /*
      * 會員登入
      */
-    public ResponseEntity<String> memberLogin(HttpServletRequest request, MemberLoginVO memberLogin) {
+    public ResponseEntity<String> memberLogin(HttpServletRequest request, @RequestBody MemberLoginVO memberLogin) {
         if (!StringUtils.hasText(memberLogin.getEmail())) 
 		{
             log.info("MemberService ==> memberLogin ........... [ 未輸入帳號 ]");
@@ -152,15 +155,20 @@ public class MemberService  implements UserDetailsService{
             member.setPlatform(CommUtils.getClientDevice(request));
             save(member);
             loadUserByUsername(member.getEmail());
-            System.out.println(loadUserByUsername(member.getEmail()));
             log.info("MemberService ==> memberLogin ........... [ 登入成功 ]");
-            return ResponseEntity.status(HttpStatus.OK).body("登入成功");
+            return ResponseEntity.status(HttpStatus.OK).body("登入成功"+loadUserByUsername(member.getEmail()));
 
         } catch (Exception e) {
             log.info("Member237Service ==> memberLogin Exception: " + e.toString());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("會員登入失敗");
         }
     }
+
+    
+	public String getAuthentication() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return " Hello " + authentication;
+	}
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -172,6 +180,7 @@ public class MemberService  implements UserDetailsService{
         if(!member.isEnabled()){
             throw new LockedException("帳號被禁用");
         }
+
         UserDetails userDetails = User.builder()
         .username(member.getEmail())
                 .password("{noop}"+member.getPassword()) // 密碼前面加上"{noop}"使用NoOpPasswordEncoder，也就是不對密碼進行任何格式的編碼。

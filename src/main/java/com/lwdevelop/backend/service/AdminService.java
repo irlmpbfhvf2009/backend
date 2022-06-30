@@ -2,25 +2,15 @@ package com.lwdevelop.backend.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.LockedException;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.lwdevelop.backend.entity.Admin;
 import com.lwdevelop.backend.entity.Member;
-import com.lwdevelop.backend.repository.AdminRepository;
 import com.lwdevelop.backend.repository.MemberRepository;
 
 
 @Service
-public class AdminService  implements UserDetailsService{
+public class AdminService  /* implements UserDetailsService */{
     @Autowired
     private MemberRepository memberRepository;
-    @Autowired
-    private AdminRepository adminRepository;
 
     public Member findByEmail(String email){
         return memberRepository.findByEmail(email);
@@ -45,7 +35,7 @@ public class AdminService  implements UserDetailsService{
         }
     }
     
-    @Override
+    /* @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Admin admin = adminRepository.findByEmail(username);
@@ -61,5 +51,5 @@ public class AdminService  implements UserDetailsService{
                 .roles(admin.getRoles().get(0))
                 .build();
         return userDetails;
-    }
+    } */
 }

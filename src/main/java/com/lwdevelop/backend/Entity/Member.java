@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -19,7 +18,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import lombok.Data;
 
 @Data
@@ -57,7 +55,6 @@ public class Member implements UserDetails {
     @LastModifiedDate
     private Date updateTime;
 
-    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream().map(s -> new SimpleGrantedAuthority(s)).collect(Collectors.toList());

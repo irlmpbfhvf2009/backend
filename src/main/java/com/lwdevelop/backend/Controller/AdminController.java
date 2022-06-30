@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,15 +23,17 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/admin")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
     @Autowired
     private AdminService adminService;
     
     @ApiOperation("查詢用戶(信箱)")
     @PostMapping(path = "/findByEmail")
-    public ResponseEntity<Member> findByEmail(
+    public ResponseEntity<Member> findByEmail(UserDetails user,
                                     HttpServletRequest request, 
                                     @RequestBody String email) throws Exception{
+        
         log.info("AdminController ==> findByEmail ........... 查詢信箱：" + email);
         return ResponseEntity.status(HttpStatus.OK).body(adminService.findByEmail(email));
     }
