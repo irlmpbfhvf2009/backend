@@ -24,6 +24,7 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
     public Member findByEmail(String email){
+        System.out.println(memberRepository.findByEmail(email));
         return memberRepository.findByEmail(email);
     }
     public Member findByPassword(String password){

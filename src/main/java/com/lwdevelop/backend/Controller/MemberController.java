@@ -28,8 +28,6 @@ public class MemberController {
     private MemberService memberService;
 
     @ApiOperation("註冊")
-   /*  @ApiImplicitParams({
-        @ApiImplicitParam(name = "memberVO", value = "用戶實體類", paramType = "body", dataType = "MemberVO", required = true)}) */
     @PostMapping(path = "/register")
     public ResponseEntity<ResponseEntity<String>> register(
                                     HttpServletRequest request, 
@@ -40,8 +38,6 @@ public class MemberController {
 
 
     @ApiOperation("登入")
-/*     @ApiImplicitParams({
-        @ApiImplicitParam(name = "memberLogin", value = "用戶實體類", paramType = "body", dataType = "MemberLoginVO", required = true)}) */
     @PostMapping(path = "/login")
     public ResponseEntity<ResponseEntity<String>> memberLogin(HttpServletRequest request, 
                                     @RequestBody MemberLoginVO memberLogin)throws Exception{

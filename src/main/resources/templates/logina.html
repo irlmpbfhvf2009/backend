@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="crossorigin="anonymous"></script>
+</head>
+<body>
+	<form method="post" enctype="application/json" action="/user/login">
+		<input id="email" type="text" name="email">
+		<input id="password" type="text" name="password">
+		<input onclick="login()" type="button" value="登入啦">
+	</form>
+</body>
+<script>
+	function login(){
+		var username=document.getElementById("email").value;
+		var password=document.getElementById("password").value;
+		$.ajax({
+			type:"post",
+			dataType:"json",
+			url:'/user/login',
+			contentType:"application/json",
+			data:JSON.stringify({
+				"email":username,
+				"password":password
+			}),
+			success:function(result){
+				if(result.code==200){
+					alert("登入成功")
+					window.location.href = "/";
+				}else{
+					alert(result.body)
+				}
+			}
+
+		})
+	}
+</script>
+</html>

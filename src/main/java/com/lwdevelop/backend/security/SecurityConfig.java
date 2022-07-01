@@ -45,7 +45,7 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 // 基于 token，不需要 csrf
-                .csrf().disable()
+                .cors().and().csrf().disable()/* .authorizeRequests().requestMatchers().permitAll() */
                 // 基于 token，不需要 session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // 下面开始设置权限
@@ -53,11 +53,16 @@ public class SecurityConfig {
                 .antMatchers("/").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/user/**").permitAll()
-                .antMatchers("/test/**").permitAll()
+                .antMatchers("/logina").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/admin/login").permitAll()
+                /* .antMatchers("/test/**").hasRole("ADMIN") */
+                /*.antMatchers("/admin/login").permitAll() */
                 .anyRequest().authenticated())
+                /* .authenticationProvider(authenticationProvider) */
                 .userDetailsService(memberUserDetailsService)
+                /* .formLogin()
+                .loginPage("/logina.html") */
+                /* .and() */
                 /* .addFilterBefore(JwtAuthFilter (), UsernamePasswordAuthenticationFilter.class) */
                 .build();
     }
