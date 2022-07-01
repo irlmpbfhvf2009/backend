@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class AdminController {
     @ApiOperation("查詢用戶")
     @GetMapping(path = "/findByEmail")
     public ResponseEntity<Member> findByEmail(
+                                    UserDetails u,
                                     HttpServletRequest request, 
                                     @RequestParam String email) throws Exception{
         log.info("AdminController ==> register ........... 查詢用戶：[" + memberService.findByEmail(email)+" ]");

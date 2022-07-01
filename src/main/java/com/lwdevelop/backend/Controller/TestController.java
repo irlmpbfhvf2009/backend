@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,12 +28,14 @@ public class TestController {
     @ApiOperation("測試getAuthentication()")
     @PostMapping(path = "/authentication")
     public ResponseEntity<String> register(
-                                     HttpServletRequest request, 
-                                     @RequestBody String memberVO) throws Exception{
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
+        UserDetails u,
+        HttpServletRequest request, 
+        @RequestBody String memberVO) throws Exception{
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        }
+        
     @PostMapping("/hello")
-    public ResponseEntity<String> hello(@AuthenticationPrincipal Member adminUser) {
+    public ResponseEntity<String> hello(UserDetails u,@AuthenticationPrincipal Member adminUser) {
         return ResponseEntity.status(HttpStatus.OK).body("Hello");
       }
 }

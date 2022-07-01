@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import com.lwdevelop.backend.entity.Member;
@@ -23,6 +24,10 @@ public class MemberService {
     
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    MemberUserDetailsService memberUserDetailsService;
+
     public Member findByEmail(String email){
         System.out.println(memberRepository.findByEmail(email));
         return memberRepository.findByEmail(email);
@@ -86,7 +91,7 @@ public class MemberService {
         try{
             log.info("MemberService ==> register ... 建立新會員");
             Member member = new Member();
-            List<String> roles = Arrays.asList(new String[] { "USER" });
+            List<String> roles = Arrays.asList(new String[] { "ROLE_USER" });
             member.setEmail(email);
             member.setPassword(password);
             member.setUsername(username);
@@ -148,6 +153,8 @@ public class MemberService {
             member.setPlatform(CommUtils.getClientDevice(request));
             save(member);
             log.info("MemberService ==> memberLogin ........... [ 登入成功 ]");
+            memberUserDetailsService.loadUserByUsername(member.getEmail());
+            System.out.println("a="+SecurityContextHolder.getContext().getAuthentication());
             return ResponseEntity.status(HttpStatus.OK).body("登入成功");
 
         } catch (Exception e) {

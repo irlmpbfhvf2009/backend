@@ -8,13 +8,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.lwdevelop.backend.service.MemberUserDetailsService;
 
 
@@ -37,44 +34,41 @@ public class SecurityConfig {
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
     @Autowired
     MemberUserDetailsService memberUserDetailsService;
-
+    
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                // 基于 token，不需要 csrf
-                .cors().and().csrf().disable()/* .authorizeRequests().requestMatchers().permitAll() */
+                .csrf().disable()
                 // 基于 token，不需要 session
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                /* .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() */
+                .addFilterBefore(JwtAuthFilter (), UsernamePasswordAuthenticationFilter.class)
                 // 下面开始设置权限
-                .authorizeRequests(authorize -> authorize
+                .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/static/**").permitAll()
                 .antMatchers("/user/**").permitAll()
+                .antMatchers("/favicon.ico").permitAll()
+                .antMatchers("/static/**").permitAll()
                 .antMatchers("/logina").permitAll()
+                .antMatchers("/auth").permitAll()
+                .antMatchers("/atoken").permitAll()
+                .antMatchers("/btoken").permitAll()
+                .antMatchers("/test/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                /* .antMatchers("/test/**").hasRole("ADMIN") */
-                /*.antMatchers("/admin/login").permitAll() */
-                .anyRequest().authenticated())
-                /* .authenticationProvider(authenticationProvider) */
-                .userDetailsService(memberUserDetailsService)
-                /* .formLogin()
-                .loginPage("/logina.html") */
-                /* .and() */
-                /* .addFilterBefore(JwtAuthFilter (), UsernamePasswordAuthenticationFilter.class) */
+                .anyRequest().authenticated()
+                .and()
                 .build();
     }
-/*     @Bean
-    JwtAuthFilter  JwtAuthFilter () {
-        return new JwtAuthFilter ();
-    } */
     @Bean
+    JwtAuthFilter JwtAuthFilter () {
+        return new JwtAuthFilter ();
+    }
+    /* @Bean
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
         return source;
-    }
+    } */
 
 }
