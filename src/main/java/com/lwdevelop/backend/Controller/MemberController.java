@@ -1,20 +1,15 @@
 package com.lwdevelop.backend.controller;
 
-import java.util.HashMap;
 
-import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.lwdevelop.backend.security.JWTUtil;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.vo.MemberLoginVO;
 import com.lwdevelop.backend.vo.MemberVO;
@@ -43,24 +38,6 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(memberService.register(request, memberVO));
     }
 
-    @PostMapping("/token")
-    public ResponseEntity<String> token(@RequestBody HashMap <String, String> user) {
-        JWTUtil jwtToken = new JWTUtil();
-        String token = jwtToken.generateToken(user); // 取得token
-        return ResponseEntity.status(HttpStatus.OK).body(token);
-    }
-    @PostMapping("/hello")
-    public ResponseEntity<String> hello(@RequestHeader("Authorization") String au,@RequestBody HashMap <String, String> user) {
-        JWTUtil jwtToken = new JWTUtil();
-        String token = jwtToken.generateToken(user); // 取得token
-        System.out.println("token="+token);
-        try {
-            jwtToken.validateToken(token);
-        } catch (AuthException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.OK).body("Hello CaiLi");
-      }
 
     @ApiOperation("登入")
 /*     @ApiImplicitParams({

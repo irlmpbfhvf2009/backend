@@ -1,4 +1,4 @@
-package com.lwdevelop.backend.webSocket;
+package com.lwdevelop.backend.WebSocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;

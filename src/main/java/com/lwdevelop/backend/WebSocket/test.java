@@ -1,4 +1,5 @@
-package com.lwdevelop.backend.webSocket;
+package com.lwdevelop.backend.WebSocket;
+
 import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.Rectangle;
