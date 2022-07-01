@@ -61,11 +61,6 @@ public class Member implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
-        return getEmail();
-    }
-
-    @Override
     public boolean isAccountNonExpired() {
         return false;
     }

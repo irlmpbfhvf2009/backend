@@ -1,4 +1,4 @@
-package com.lwdevelop.backend.security;
+/* package com.lwdevelop.backend.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.lwdevelop.backend.service.MemberService;
+import com.lwdevelop.backend.service.MemberUserDetailsService;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     String tokenHead = "Bearer ";
     String tokenHeader = "Authorization";
     @Autowired
-    MemberService memberService;
+    MemberUserDetailsService memberUserDetailsService;
     @Autowired
     RedisTemplate<String, String> redisTemplate;
     @Autowired
@@ -44,7 +44,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                UserDetails userDetails = this.memberService.loadUserByUsername(username);
+                UserDetails userDetails = this.memberUserDetailsService.loadUserByUsername(username);
 
                 if (jwtUtil.validateToken(authToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -60,3 +60,4 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+ */
