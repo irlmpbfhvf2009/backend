@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.lwdevelop.backend.entity.Member;
 import com.lwdevelop.backend.service.MemberService;
+import com.lwdevelop.backend.vo.EmailVO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin(origins = "*")
 @RequestMapping("/admin")
 public class AdminController {
+    
     @Autowired
     MemberService memberService;
 
@@ -28,9 +31,9 @@ public class AdminController {
     @PostMapping(path = "/findByEmail")
     public ResponseEntity<Member> findByEmail(
                                     HttpServletRequest request, 
-                                    @RequestBody String email) throws Exception{
-        log.info("AdminController ==> findByEmail ........... 查詢用戶：[" + memberService.findByEmail(email)+" ]");
-        return ResponseEntity.status(HttpStatus.OK).body(memberService.findByEmail(email));
+                                    @RequestBody EmailVO email) throws Exception{
+        log.info("AdminController ==> findByEmail ........... 查詢用戶：[" + memberService.findByEmail(email.getEmail())+" ]");
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.findByEmail(email.getEmail()));
     }
 
 }

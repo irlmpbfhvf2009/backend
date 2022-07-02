@@ -13,9 +13,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.lwdevelop.backend.service.MemberUserDetailsService;
 
 
@@ -43,8 +40,11 @@ public class SecurityConfig {
     
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http.csrf().disable();
+                http.cors().disable();
+
         return http
-                .csrf().disable().cors().disable()
+                /* .csrf().and().cors().disable() */
                 // 基于 token，不需要 session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(JwtFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -62,11 +62,11 @@ public class SecurityConfig {
     JwtAuthFilter JwtFilter () {
         return new JwtAuthFilter ();
     }
-    @Bean
+    /* @Bean
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
         return source;
-    }
+    } */
 
 }
