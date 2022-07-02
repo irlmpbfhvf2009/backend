@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,7 +18,7 @@ import com.lwdevelop.backend.service.MemberUserDetailsService;
 
 @Configuration
 @EnableWebSecurity	// security 過濾器
-/* @EnableGlobalMethodSecurity(prePostEnabled = true) */	// 方法級別權限驗證
+@EnableGlobalMethodSecurity(prePostEnabled = true)	// 方法級別權限驗證
 public class SecurityConfig {
 
 /*     @Bean
@@ -40,7 +41,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf().and().cors().disable()
+                .csrf().disable()/* .cors().disable() */
                 // 基于 token，不需要 session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(JwtFilter(), UsernamePasswordAuthenticationFilter.class)
