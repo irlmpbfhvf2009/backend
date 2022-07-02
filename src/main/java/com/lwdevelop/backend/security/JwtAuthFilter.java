@@ -26,35 +26,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-                String token=request.getHeader("Authorization");
-                System.out.println("abccc");
+                String token=request.getHeader("Authorization").substring(6);
                 if (!requiresAuthentication(token)){
-                    System.out.println("1");
                     filterChain.doFilter(request,response); // continua con los sgtes filtros
                     return;
                 }
                 UsernamePasswordAuthenticationToken authenticationToken=null;
-                System.out.println("2");
-                System.out.println(token);
-                token=token.substring(6);
                 if (jwtUtils.validateToken(token)){
-                    Collection<? extends GrantedAuthority> a =  memberUserDetailsService.loadUserByUsername(jwtUtils.getUserNameFromJwtToken(token)).getAuthorities();
-                    System.out.println("3");
-                    for (GrantedAuthority auth:a) {
-                        System.out.println("4");
-                        System.out.println(auth.getAuthority());
-                    }
-                    System.out.println("5");
-                    authenticationToken=new UsernamePasswordAuthenticationToken(jwtUtils.getUserNameFromJwtToken(token),null,a);
+                    Collection<? extends GrantedAuthority> auth =  
+                                memberUserDetailsService.loadUserByUsername(jwtUtils.getUserNameFromJwtToken(token)).getAuthorities();
+                    authenticationToken=new UsernamePasswordAuthenticationToken(jwtUtils.getUserNameFromJwtToken(token),null,auth);
                 }
-                System.out.println("6");
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                System.out.println(SecurityContextHolder.getContext().getAuthentication());
-               
                 filterChain.doFilter(request,response);
     }
     protected boolean requiresAuthentication(String header){
-        System.out.println("7");
         return header != null && header.startsWith("Bearer ");
     }
 }

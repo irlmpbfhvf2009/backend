@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,19 +12,20 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import com.lwdevelop.backend.service.MemberUserDetailsService;
 
 
 @Configuration
-@EnableWebSecurity	// 添加 security 过滤器
-@EnableGlobalMethodSecurity(prePostEnabled = true)	// 启用方法级别的权限认证
+@EnableWebSecurity	// security 過濾器
+/* @EnableGlobalMethodSecurity(prePostEnabled = true) */	// 方法級別權限驗證
 public class SecurityConfig {
 
 /*     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     } */
+    @Autowired
+    MemberUserDetailsService memberUserDetailsService;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -36,17 +36,14 @@ public class SecurityConfig {
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-    @Autowired
-    MemberUserDetailsService memberUserDetailsService;
     
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf().disable()
+                .csrf().and().cors().disable()
                 // 基于 token，不需要 session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .addFilterBefore(jwtAuthFilterWW(), UsernamePasswordAuthenticationFilter.class)
-                // 下面开始设置权限
+                .addFilterBefore(JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/user/**").permitAll()
@@ -56,14 +53,14 @@ public class SecurityConfig {
                 .antMatchers("/auth").permitAll()
                 .antMatchers("/atoken").permitAll()
                 .antMatchers("/btoken").permitAll()
-                .antMatchers("/test/**").hasRole("ADMIN")
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/test/**").hasAuthority("ADMIN")
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .build();
     }
     @Bean
-    JwtAuthFilter jwtAuthFilterWW () {
+    JwtAuthFilter JwtFilter () {
         return new JwtAuthFilter ();
     }
     /* @Bean

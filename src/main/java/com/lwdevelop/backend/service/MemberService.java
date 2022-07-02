@@ -87,11 +87,10 @@ public class MemberService {
         // 黑名單檢查
         //String clientIP = CommUtils.getClientIP(request);
 
-
         try{
             log.info("MemberService ==> register ... 建立新會員");
             Member member = new Member();
-            List<String> roles = Arrays.asList(new String[] { "ROLE_USER" });
+            List<String> roles = Arrays.asList(new String[] { "USER" });
             member.setEmail(email);
             member.setPassword(password);
             member.setUsername(username);
@@ -115,6 +114,7 @@ public class MemberService {
      * 會員登入
      */
     public ResponseEntity<String> memberLogin(HttpServletRequest request, @RequestBody MemberLoginVO memberLogin) {
+
         if (!StringUtils.hasText(memberLogin.getEmail())) 
 		{
             log.info("MemberService ==> memberLogin ........... [ 未輸入帳號 ]");
@@ -126,8 +126,8 @@ public class MemberService {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("未輸入密碼");
 		}
 
-
         Member member = findByEmail(memberLogin.getEmail());
+
         if(member == null){
             log.info("MemberService ==> memberLogin ........... [ 查無此會員 ]");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("查無此會員");
@@ -152,11 +152,13 @@ public class MemberService {
             member.setLastLoginIP(CommUtils.getClientIP(request));
             member.setPlatform(CommUtils.getClientDevice(request));
             save(member);
+
             log.info("MemberService ==> memberLogin ........... [ 登入成功 ]");
-            /* memberUserDetailsService.loadUserByUsername(member.getEmail()); */
+
             JwtUtils jwtToken = new JwtUtils();
             String token = jwtToken.generateToken(member); // 取得token
             System.out.println(token);
+
             return ResponseEntity.status(HttpStatus.OK).body("登入成功");
 
         } catch (Exception e) {
