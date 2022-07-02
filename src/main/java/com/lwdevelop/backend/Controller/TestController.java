@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,7 +36,7 @@ public class TestController {
         }
         
     @PostMapping("/hello")
-    public ResponseEntity<String> hello(UserDetails u,@AuthenticationPrincipal Member adminUser) {
+    public ResponseEntity<String> hello() {
         return ResponseEntity.status(HttpStatus.OK).body("Hello");
       }
 }

@@ -1,39 +1,34 @@
 package com.lwdevelop.backend.security;
 
 import java.util.Date;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.lwdevelop.backend.entity.Member;
-
 import io.jsonwebtoken.*;
 
 
 @Component
 public class JwtUtils  { 
   
-  @Value("")
-  private String jwtSecret;
+  private static final String SECRET = "Bearer ";
+  private int jwtExpirationMs = 1*60*1000;
 
-  @Value("")
-  private int jwtExpirationMs;
-
-  public String generateJwtToken(Member userPrincipal) {
-    return generateTokenFromUsername(userPrincipal.getEmail());
+  public String generateToken(Member member) {
+    return generateTokenFromUsername(member.getEmail());
   }
 
   public String generateTokenFromUsername(String username) {
     return Jwts.builder().setSubject(username).setIssuedAt(new Date())
-        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, SECRET)
         .compact();
   }
 
   public String getUserNameFromJwtToken(String token) {
-    return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody().getSubject();
   }
 
-  public boolean validateJwtToken(String authToken) {
+  public boolean validateToken(String token) {
     try {
-      Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+      Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
       return true;
     } catch (SignatureException e) {
         System.out.println("Invalid JWT signature: {}"+ e.getMessage());
@@ -46,8 +41,8 @@ public class JwtUtils  {
     } catch (IllegalArgumentException e) {
         System.out.println("JWT claims string is empty: {}"+ e.getMessage());
     }
-
     return false;
+
   }
 
 

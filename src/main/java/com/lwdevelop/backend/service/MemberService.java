@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import com.lwdevelop.backend.entity.Member;
 import com.lwdevelop.backend.repository.MemberRepository;
+import com.lwdevelop.backend.security.JwtUtils;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.utils.CommUtils;
 import com.lwdevelop.backend.vo.MemberLoginVO;
@@ -153,8 +153,10 @@ public class MemberService {
             member.setPlatform(CommUtils.getClientDevice(request));
             save(member);
             log.info("MemberService ==> memberLogin ........... [ 登入成功 ]");
-            memberUserDetailsService.loadUserByUsername(member.getEmail());
-            System.out.println("a="+SecurityContextHolder.getContext().getAuthentication());
+            /* memberUserDetailsService.loadUserByUsername(member.getEmail()); */
+            JwtUtils jwtToken = new JwtUtils();
+            String token = jwtToken.generateToken(member); // 取得token
+            System.out.println(token);
             return ResponseEntity.status(HttpStatus.OK).body("登入成功");
 
         } catch (Exception e) {

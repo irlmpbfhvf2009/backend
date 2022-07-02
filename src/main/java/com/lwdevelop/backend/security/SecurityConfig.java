@@ -8,10 +8,12 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import com.lwdevelop.backend.service.MemberUserDetailsService;
 
 
@@ -42,8 +44,8 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 // 基于 token，不需要 session
-                /* .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() */
-                .addFilterBefore(JwtAuthFilter (), UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .addFilterBefore(jwtAuthFilterWW(), UsernamePasswordAuthenticationFilter.class)
                 // 下面开始设置权限
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
@@ -61,7 +63,7 @@ public class SecurityConfig {
                 .build();
     }
     @Bean
-    JwtAuthFilter JwtAuthFilter () {
+    JwtAuthFilter jwtAuthFilterWW () {
         return new JwtAuthFilter ();
     }
     /* @Bean
