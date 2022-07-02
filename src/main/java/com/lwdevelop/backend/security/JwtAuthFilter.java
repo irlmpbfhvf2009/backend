@@ -33,7 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
         UsernamePasswordAuthenticationToken authenticationToken = null;
-        String token=header.substring(6);   // 篩掉Bearer ey...開始
+        String token = header.substring(6); // 篩掉Bearer ey...開始
         if (jwtUtils.validateToken(token)) {
             Collection<? extends GrantedAuthority> auth = memberUserDetailsService
                     .loadUserByUsername(jwtUtils.getUserNameFromJwtToken(token)).getAuthorities();
@@ -41,6 +41,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     auth);
         }
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+
         filterChain.doFilter(request, response);
 
     }

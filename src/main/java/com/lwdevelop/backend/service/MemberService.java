@@ -157,9 +157,8 @@ public class MemberService {
 
             JwtUtils jwtToken = new JwtUtils();
             String token = jwtToken.generateToken(member); // 取得token
-            System.out.println(token);
 
-            return ResponseEntity.status(HttpStatus.OK).body("登入成功");
+            return ResponseEntity.status(HttpStatus.OK).body(token);
 
         } catch (Exception e) {
             log.info("Member237Service ==> memberLogin Exception: " + e.toString());
