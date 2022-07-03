@@ -11,15 +11,20 @@
   2. springboot + mysql 
   3. vue3 + VueCli
 
-第二天：
+第三天：
   1. 後端security配置 
   2. 後端JJWT簽名與驗證配置
-  3. VUE多環境配置
+  3. user數據表設計
+  4. VUE多環境配置
   
-第三天：
+第四天：
+  1. user數據表設計
+  2. VUE多環境配置
+
+第五天：
   1. VUE修改啟動端口
   2. 前端axios全局配置 + 攔截器封裝
   3. 前端localStorage 儲存用戶信息(Token)
   4. 更換favicon
-  5. 後端用戶註冊與登入接口
+  5. 後端用戶註冊接口與登入接口
   
