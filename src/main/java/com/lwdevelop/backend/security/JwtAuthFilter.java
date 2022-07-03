@@ -28,6 +28,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
+        /* response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+		response.setHeader("Access-Control-Allow-Headers", "*");	 */	
+
         if (!requiresAuthentication(header)) {
             filterChain.doFilter(request, response);
             return;
@@ -42,9 +46,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-        /* response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "*"); */
+
 
         filterChain.doFilter(request, response);
 
