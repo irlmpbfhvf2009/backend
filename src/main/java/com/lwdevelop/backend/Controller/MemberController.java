@@ -19,8 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Api(tags = "用戶接口")
+@CrossOrigin(origins = "*") 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/user")
 public class MemberController {
 
