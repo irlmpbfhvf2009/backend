@@ -11,6 +11,8 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.lwdevelop.backend.converter.ListToJsonConverter;
 import com.lwdevelop.backend.converter.StringListConverter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -24,7 +26,6 @@ import lombok.Data;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Member implements UserDetails {
-//public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,7 +56,8 @@ public class Member implements UserDetails {
     @LastModifiedDate
     private Date updateTime;
     
-    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "json")
+    @Convert(converter = ListToJsonConverter.class)
     private List<String> friend; // 好友名单
 
 

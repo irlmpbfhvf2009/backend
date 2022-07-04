@@ -2,7 +2,6 @@ package com.lwdevelop.backend.controller;
 
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,7 +64,7 @@ public class MemberController {
     @ApiOperation("新增好友")
     @PostMapping(path = "/addFriend")
     public ResponseEntity<ResponseEntity<String>> addFriend(@RequestBody AddFriendVO addFriendVO)throws Exception{
-    	log.info("MemberController ==> addFriend ........... 新增好友 [ {} 加入 {} ]",addFriendVO.getEmail(),addFriendVO.getFriendUsername());
+    	log.info("MemberController ==> addFriend ........... 新增好友 [ {} 加入 {} ]",addFriendVO.getLocalEmail(),addFriendVO.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(memberService.addFriend(addFriendVO));
     }
     

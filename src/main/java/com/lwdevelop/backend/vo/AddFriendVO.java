@@ -9,9 +9,9 @@ import lombok.Data;
 public class AddFriendVO {
     
     @ApiModelProperty(value = "登入信箱",required = true)
-    private String email;
+    private String localEmail;
 
-    @ApiModelProperty(value = "好友用戶名",required = true)
-    private String friendUsername;
+    @ApiModelProperty(value = "輸入的用戶名",required = true)
+    private String email;
 
 }

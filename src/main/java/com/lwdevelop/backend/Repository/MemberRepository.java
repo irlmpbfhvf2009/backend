@@ -12,7 +12,7 @@ import com.lwdevelop.backend.entity.Member;
 public interface MemberRepository extends JpaRepository<Member,Integer> {
     public Member findByEmail(String member);
     public Member findByPassword(String password);
-    public List<String> findByUsername(String username);
+    public List<Member> findByUsername(String username);
     public void deleteByEmail(String email);
     public void deleteByUsername(String Username);
 }
