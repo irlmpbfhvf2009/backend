@@ -37,7 +37,7 @@ public class MemberController {
     public ResponseEntity<ResponseEntity<String>> register(
                                     HttpServletRequest request, 
                                     @RequestBody MemberVO memberVO) throws Exception{
-        log.info("MemberController ==> register ........... 會員註冊：" + memberVO.toString());
+        log.info("MemberController ==> register ........... 會員註冊：{}" , memberVO.toString());
         return ResponseEntity.status(HttpStatus.OK).body(memberService.register(request, memberVO));
     }
 
@@ -51,21 +51,21 @@ public class MemberController {
             return null;
         }
         
-    	log.info("MemberController ==> memberLogin ........... 會員登入 [" + memberLogin.getEmail() + "]");
+    	log.info("MemberController ==> memberLogin ........... 會員登入 [ {} ]",memberLogin.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(memberService.memberLogin(request, memberLogin));
     }
 
     @ApiOperation("搜尋好友")
     @PostMapping(path = "/searchFriend")
     public ResponseEntity<ResponseEntity<List<String>>> searchFriend(@RequestBody SearchFriendVO searchFriendVO)throws Exception{
-    	log.info("MemberController ==> searchFriend ........... 搜尋好友 [" + searchFriendVO.getUsername() + "]");
+    	log.info("MemberController ==> searchFriend ........... 搜尋好友 [ {} ]",searchFriendVO.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(memberService.searchFriend(searchFriendVO));
     }
 
     @ApiOperation("新增好友")
     @PostMapping(path = "/addFriend")
     public ResponseEntity<ResponseEntity<String>> addFriend(@RequestBody AddFriendVO addFriendVO)throws Exception{
-    	log.info("MemberController ==> addFriend ........... 新增好友 [" + addFriendVO.getEmail() + " 新增 " + addFriendVO.getFriendUsername() + "]");
+    	log.info("MemberController ==> addFriend ........... 新增好友 [ {} 加入 {} ]",addFriendVO.getEmail(),addFriendVO.getFriendUsername());
         return ResponseEntity.status(HttpStatus.OK).body(memberService.addFriend(addFriendVO));
     }
     
