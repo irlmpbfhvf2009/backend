@@ -33,10 +33,5 @@ public class AdminController {
         log.info("AdminController ==> findByEmail ........... 查詢用戶：[" + memberService.findByEmail(email.getEmail())+" ]");
         return ResponseEntity.status(HttpStatus.OK).body(memberService.findByEmail(email.getEmail()));
     }
-    @ApiOperation("test")
-    @PostMapping(path = "/test")
-    public ResponseEntity<String> test() throws Exception{
-        return ResponseEntity.status(HttpStatus.OK).body("test");
-    }
 
 }

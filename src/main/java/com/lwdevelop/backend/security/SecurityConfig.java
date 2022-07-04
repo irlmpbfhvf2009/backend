@@ -39,7 +39,15 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
     
-    
+    private static final String[] AUTH_LIST = {
+        "/v3/api-docs",
+        "/configuration/ui",
+        "/swagger-resources/**",
+        "/configuration/security",
+        "/swagger-ui.html",
+        "/webjars/**"
+      };
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -51,8 +59,9 @@ public class SecurityConfig {
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/user/**").permitAll()
-                .antMatchers("/favicon.ico", "/static/**").permitAll()
+                .antMatchers("/favicon.ico", "/static/**","/swagger-ui/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers(AUTH_LIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .build();

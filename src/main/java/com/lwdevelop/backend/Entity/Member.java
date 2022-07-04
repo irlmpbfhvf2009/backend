@@ -54,6 +54,10 @@ public class Member implements UserDetails {
 
     @LastModifiedDate
     private Date updateTime;
+    
+    @Convert(converter = StringListConverter.class)
+    private List<String> friend; // 好友名单
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -2,6 +2,8 @@ package com.lwdevelop.backend.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,9 +15,11 @@ import com.lwdevelop.backend.repository.MemberRepository;
 import com.lwdevelop.backend.security.JwtUtils;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.utils.CommUtils;
+import com.lwdevelop.backend.vo.AddFriendVO;
 import com.lwdevelop.backend.vo.MemberLoginVO;
 import com.lwdevelop.backend.vo.MemberVO;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import com.lwdevelop.backend.vo.SearchFriendVO;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,14 +32,16 @@ public class MemberService {
     @Autowired
     MemberUserDetailsService memberUserDetailsService;
 
+    public Optional<Member> findById(Integer id){
+        return memberRepository.findById(id);
+    }
     public Member findByEmail(String email){
-        System.out.println(memberRepository.findByEmail(email));
         return memberRepository.findByEmail(email);
     }
     public Member findByPassword(String password){
         return memberRepository.findByPassword(password);
     }
-    public Member findByUsername(String username){
+    public List<String> findByUsername(String username){
         return memberRepository.findByUsername(username);
     }
     public List<Member> getAllMember(){
@@ -84,9 +90,6 @@ public class MemberService {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用戶名稱已經存在");
 		}
 
-        // 黑名單檢查
-        //String clientIP = CommUtils.getClientIP(request);
-
         try{
             log.info("MemberService ==> register ... 建立新會員");
             Member member = new Member();
@@ -113,7 +116,7 @@ public class MemberService {
     /*
      * 會員登入
      */
-    public ResponseEntity<String> memberLogin(HttpServletRequest request, @RequestBody MemberLoginVO memberLogin) {
+    public ResponseEntity<String> memberLogin(HttpServletRequest request,MemberLoginVO memberLogin) {
 
         if (!StringUtils.hasText(memberLogin.getEmail())) 
 		{
@@ -163,6 +166,41 @@ public class MemberService {
         } catch (Exception e) {
             log.info("Member237Service ==> memberLogin Exception: " + e.toString());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("會員登入失敗");
+        }
+    }
+
+    /*
+     * 搜尋好友
+     */
+    public ResponseEntity<List<String>> searchFriend(SearchFriendVO searchFriendVO) {
+        List<String> usernameList = findByUsername(searchFriendVO.getUsername());
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(usernameList);
+        } catch (Exception e) {
+            log.info("Member237Service ==> searchFriend Exception: " + e.toString());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(usernameList);
+        }
+    }
+
+    /*
+     * 新增好友
+     */
+    public ResponseEntity<String> addFriend(AddFriendVO addFriendVO) {
+        try{
+           /*  Member member = findByEmail(addFriendVO.getEmail()); */
+            List<String> friend = findByUsername(addFriendVO.getFriendUsername());
+            /* List<String> friendGroup = member.getFriend(); */
+
+            if(friend==null){
+                log.info("MemberService ==> addFriend ........... [ 用戶不存在 ]");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用戶不存在");
+            }
+
+            log.info("MemberService ==> addFriend ........... [ 新增成功 ]");
+            return ResponseEntity.status(HttpStatus.OK).body("新增成功");
+        } catch (Exception e) {
+            log.info("Member237Service ==> addFriend Exception: " + e.toString());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("新增失敗");
         }
     }
 
