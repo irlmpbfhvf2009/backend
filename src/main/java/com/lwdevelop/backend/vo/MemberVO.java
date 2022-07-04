@@ -15,4 +15,8 @@ public class MemberVO {
 	private String email;
     @ApiModelProperty(value = "密碼", required = true)
 	private String password;
+    @ApiModelProperty(value = "令牌", required = true)
+    private String token;
+    @ApiModelProperty(value = "登入信箱",required = true)
+    private String loginEmail;
 }

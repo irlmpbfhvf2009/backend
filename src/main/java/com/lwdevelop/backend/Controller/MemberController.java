@@ -1,6 +1,5 @@
 package com.lwdevelop.backend.controller;
 
-
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.lwdevelop.backend.service.MemberService;
-import com.lwdevelop.backend.vo.AddFriendVO;
-import com.lwdevelop.backend.vo.MemberLoginVO;
 import com.lwdevelop.backend.vo.MemberVO;
 import com.lwdevelop.backend.vo.SearchFriendVO;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -45,13 +41,12 @@ public class MemberController {
     @PostMapping(path = "/login")
     public ResponseEntity<ResponseEntity<String>> memberLogin(
                                     HttpServletRequest request, 
-                                    @RequestBody MemberLoginVO memberLogin)throws Exception{
-    	if (memberLogin == null) {
+                                    @RequestBody MemberVO memberVO)throws Exception{
+    	if (memberVO == null) {
             return null;
         }
-        
-    	log.info("MemberController ==> memberLogin ........... 會員登入 [ {} ]",memberLogin.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(memberService.memberLogin(request, memberLogin));
+    	log.info("MemberController ==> memberLogin ........... 會員登入 [ {} ]",memberVO.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.memberLogin(request, memberVO));
     }
 
     @ApiOperation("搜尋好友")
@@ -63,9 +58,16 @@ public class MemberController {
 
     @ApiOperation("新增好友")
     @PostMapping(path = "/addFriend")
-    public ResponseEntity<ResponseEntity<String>> addFriend(@RequestBody AddFriendVO addFriendVO)throws Exception{
-    	log.info("MemberController ==> addFriend ........... 新增好友 [ {} 加入 {} ]",addFriendVO.getLocalEmail(),addFriendVO.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(memberService.addFriend(addFriendVO));
+    public ResponseEntity<ResponseEntity<String>> addFriend(@RequestBody MemberVO memberVO)throws Exception{
+    	log.info("MemberController ==> addFriend ........... 新增好友 [ {} 加入 {} ]",memberVO.getLoginEmail(),memberVO.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.addFriend(memberVO));
+    }
+
+    @ApiOperation("我的好友")
+    @PostMapping(path = "/myFriend")
+    public ResponseEntity<ResponseEntity<List<String>>> myFriend(HttpServletRequest request, 
+                                                    @RequestBody MemberVO memberVO)throws Exception{
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.myFriend(memberVO));
     }
     
 

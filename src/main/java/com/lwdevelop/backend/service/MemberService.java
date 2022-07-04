@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +15,6 @@ import com.lwdevelop.backend.repository.MemberRepository;
 import com.lwdevelop.backend.security.JwtUtils;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.utils.CommUtils;
-import com.lwdevelop.backend.vo.AddFriendVO;
-import com.lwdevelop.backend.vo.MemberLoginVO;
 import com.lwdevelop.backend.vo.MemberVO;
 import com.lwdevelop.backend.vo.SearchFriendVO;
 
@@ -121,18 +118,18 @@ public class MemberService {
     /*
      * 會員登入
      */
-    public ResponseEntity<String> memberLogin(HttpServletRequest request, MemberLoginVO memberLogin) {
+    public ResponseEntity<String> memberLogin(HttpServletRequest request, MemberVO memberVO) {
 
-        if (!StringUtils.hasText(memberLogin.getEmail())) {
+        if (!StringUtils.hasText(memberVO.getEmail())) {
             log.info("MemberService ==> memberLogin ........... [ {} ]", "未輸入帳號");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("未輸入帳號");
         }
-        if (!StringUtils.hasText(memberLogin.getPassword())) {
+        if (!StringUtils.hasText(memberVO.getPassword())) {
             log.info("MemberService ==> memberLogin ........... [ {} ]", "未輸入密碼");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("未輸入密碼");
         }
 
-        Member member = findByEmail(memberLogin.getEmail());
+        Member member = findByEmail(memberVO.getEmail());
 
         if (member == null) {
             log.info("MemberService ==> memberLogin ........... [ {} ]", "查無此會員");
@@ -142,7 +139,7 @@ public class MemberService {
             log.info("MemberService ==> memberLogin ........... [ {} ]", "此帳號被停用");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("此帳號被停用");
         }
-        if (!member.getPassword().equals(memberLogin.getPassword())) {
+        if (!member.getPassword().equals(memberVO.getPassword())) {
             log.info("MemberService ==> memberLogin ........... [ {} ]", "密碼錯誤");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("密碼錯誤");
         }
@@ -193,10 +190,10 @@ public class MemberService {
     /*
      * 新增好友
      */
-    public ResponseEntity<String> addFriend(AddFriendVO addFriendVO) {
+    public ResponseEntity<String> addFriend(MemberVO memberVO) {
         try {
-            Member member = findByEmail(addFriendVO.getLocalEmail());
-            Member friend = findByEmail(addFriendVO.getEmail());
+            Member member = findByEmail(memberVO.getLoginEmail());
+            Member friend = findByEmail(memberVO.getEmail());
 
             if (member == null) {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "請先登入");
@@ -205,6 +202,10 @@ public class MemberService {
             if (friend == null) {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "用戶不存在");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用戶不存在");
+            }
+            if(member.getEmail().equals(friend.getEmail())){
+                log.info("MemberService ==> addFriend ........... [ {} ]", "不能新增自己為好友");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不能新增自己為好友");
             }
             List<String> memberList = member.getFriend();
             if(memberList==null){
@@ -215,7 +216,7 @@ public class MemberService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("名單已存在好友");
             }
 
-            memberList.add(friend.getEmail());
+            memberList.add(friend.getUsername()+":"+friend.getEmail());
             member.setFriend(memberList);
             save(member);
             
@@ -225,6 +226,18 @@ public class MemberService {
             log.info("Member237Service ==> addFriend Exception: {}", e.toString());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("新增好友失敗");
         }
+    }
+    /*
+     * 我的好友
+     */
+    public ResponseEntity<List<String>> myFriend(MemberVO memberVO) {
+        Member member = findByEmail(memberVO.getLoginEmail());
+        List<String> memberList = member.getFriend();
+        if(memberList==null){
+            memberList=new ArrayList<>();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(memberList);
     }
 
 }
