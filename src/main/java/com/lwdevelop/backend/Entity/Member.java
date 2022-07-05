@@ -11,8 +11,6 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.lwdevelop.backend.converter.ListToJsonConverter;
 import com.lwdevelop.backend.converter.StringListConverter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -56,9 +54,9 @@ public class Member implements UserDetails {
     @LastModifiedDate
     private Date updateTime;
     
-    @Column(columnDefinition = "json")
-    @Convert(converter = ListToJsonConverter.class)
-    private List<String> friend; // 好友名单
+    @Column
+    @Convert(converter = StringListConverter.class)
+    private List<String> friendId; // 好友名单
 
 
     @Override

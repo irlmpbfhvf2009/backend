@@ -207,17 +207,17 @@ public class MemberService {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "不能新增自己為好友");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不能新增自己為好友");
             }
-            List<String> memberList = member.getFriend();
+            List<String> memberList = member.getFriendId();
             if(memberList==null){
                 memberList=new ArrayList<>();
             }
-            if(memberList.contains(friend.getEmail())){
+            if(memberList.contains(String.valueOf(friend.getId()))){
                 log.info("MemberService ==> addFriend ........... [ {} ]", "名單已存在好友");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("名單已存在好友");
             }
 
-            memberList.add(friend.getUsername()+":"+friend.getEmail());
-            member.setFriend(memberList);
+            memberList.add(String.valueOf(friend.getId()));
+            member.setFriendId(memberList);
             save(member);
             
             log.info("MemberService ==> addFriend ........... [ {} ]", "新增好友成功");
@@ -232,12 +232,17 @@ public class MemberService {
      */
     public ResponseEntity<List<String>> myFriend(MemberVO memberVO) {
         Member member = findByEmail(memberVO.getLoginEmail());
-        List<String> memberList = member.getFriend();
+        List<String> memberList = member.getFriendId();
         if(memberList==null){
             memberList=new ArrayList<>();
         }
+        List<String> usernameList=new ArrayList<>();
 
-        return ResponseEntity.status(HttpStatus.OK).body(memberList);
+        for(String m:memberList){
+            usernameList.add(findById(Integer.parseInt(m)).get().getUsername());
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(usernameList);
     }
 
 }
