@@ -9,6 +9,8 @@ import lombok.ToString;
 @ApiModel
 @ToString
 public class MemberVO {
+    @ApiModelProperty(value = "編號", required = true)
+	private Integer id;
     @ApiModelProperty(value = "用戶名", required = true)
 	private String username;
     @ApiModelProperty(value = "信箱", required = true)

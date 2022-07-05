@@ -1,6 +1,7 @@
 package com.lwdevelop.backend.security;
 
 import java.util.Date;
+import javax.xml.bind.DatatypeConverter;
 import org.springframework.stereotype.Component;
 import com.lwdevelop.backend.entity.Member;
 import io.jsonwebtoken.*;
@@ -11,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtUtils {
 
   private static final String SECRET = "5$98f12!@a$15";
-  private int jwtExpirationMs = 1 * 60 * 1000;
+  private int jwtExpirationMs = 1 * 60 * 60 * 1000;
 
   public String generateToken(Member member) {
     return generateTokenFromUsername(member.getEmail());
@@ -48,7 +49,10 @@ public class JwtUtils {
       log.info("JWT claims string is empty: {}", e.getMessage());
     }
     return false;
+  }
 
+  public String verifyToken(String token) {
+    return Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(SECRET)).parseClaimsJws(token).getBody().getSubject();
   }
 
 }

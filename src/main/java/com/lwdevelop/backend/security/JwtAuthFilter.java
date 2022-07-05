@@ -28,16 +28,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
-        /* response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
-		response.setHeader("Access-Control-Allow-Headers", "*");	 */	
 
         if (!requiresAuthentication(header)) {
             filterChain.doFilter(request, response);
             return;
         }
         UsernamePasswordAuthenticationToken authenticationToken = null;
-        String token = header.substring(6); // 篩掉Bearer ey...開始
+        String token = header.substring(6); // ey...開始
         if (jwtUtils.validateToken(token)) {
             Collection<? extends GrantedAuthority> auth = memberUserDetailsService
                     .loadUserByUsername(jwtUtils.getUserNameFromJwtToken(token)).getAuthorities();

@@ -17,7 +17,6 @@ import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.utils.CommUtils;
 import com.lwdevelop.backend.vo.MemberVO;
 import com.lwdevelop.backend.vo.SearchFriendVO;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -170,6 +169,15 @@ public class MemberService {
     }
 
     /*
+     * 用戶信息
+     */
+    public ResponseEntity<Member> memberInfo(MemberVO memberVO){
+        JwtUtils token = new JwtUtils();
+        String email =token.verifyToken(memberVO.getToken());
+        Member member = findByEmail(email);
+        return ResponseEntity.status(HttpStatus.OK).body(member);
+    }
+    /*
      * 搜尋好友
      */
     public ResponseEntity<List<String>> searchFriend(SearchFriendVO searchFriendVO) {
@@ -232,17 +240,18 @@ public class MemberService {
      */
     public ResponseEntity<List<String>> myFriend(MemberVO memberVO) {
         Member member = findByEmail(memberVO.getLoginEmail());
-        List<String> memberList = member.getFriendId();
-        if(memberList==null){
-            memberList=new ArrayList<>();
+        if(member.getFriendId()==null){
+            List<String> usernameList=new ArrayList<>();
+            return ResponseEntity.status(HttpStatus.OK).body(usernameList);
+        }else{
+            List<String> memberList = member.getFriendId();
+            List<String> usernameList=new ArrayList<>();
+            for(String m:memberList){
+                usernameList.add(findById(Integer.parseInt(m)).get().getUsername());
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(usernameList);
         }
-        List<String> usernameList=new ArrayList<>();
 
-        for(String m:memberList){
-            usernameList.add(findById(Integer.parseInt(m)).get().getUsername());
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(usernameList);
     }
 
 }
