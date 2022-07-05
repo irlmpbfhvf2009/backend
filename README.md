@@ -14,6 +14,7 @@
 第三天：
   1. 後端security配置 
   2. 後端JJWT簽名與驗證配置
+  3. 後端swagger v3配置
   
 第四天：
   1. user數據表設計
