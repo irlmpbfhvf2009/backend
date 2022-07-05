@@ -1,7 +1,7 @@
 # backend
 
 項目介紹：
-基于 Springboot + Vue3 開發的系統
+基于 Springboot2.7.1 + Vue3 開發的系統
 
 項目進展：
 
