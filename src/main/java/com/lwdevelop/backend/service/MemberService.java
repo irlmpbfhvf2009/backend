@@ -2,7 +2,9 @@ package com.lwdevelop.backend.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,12 +173,13 @@ public class MemberService {
     /*
      * 用戶信息
      */
-    public ResponseEntity<Member> memberInfo(MemberVO memberVO){
+    public ResponseEntity<Member> memberInfo(MemberVO memberVO) {
         JwtUtils token = new JwtUtils();
-        String email =token.verifyToken(memberVO.getToken());
+        String email = token.verifyToken(memberVO.getToken());
         Member member = findByEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(member);
     }
+
     /*
      * 搜尋好友
      */
@@ -211,15 +214,15 @@ public class MemberService {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "用戶不存在");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用戶不存在");
             }
-            if(member.getEmail().equals(friend.getEmail())){
+            if (member.getEmail().equals(friend.getEmail())) {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "不能新增自己為好友");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不能新增自己為好友");
             }
             List<String> memberList = member.getFriendId();
-            if(memberList==null){
-                memberList=new ArrayList<>();
+            if (memberList == null) {
+                memberList = new ArrayList<>();
             }
-            if(memberList.contains(String.valueOf(friend.getId()))){
+            if (memberList.contains(String.valueOf(friend.getId()))) {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "名單已存在好友");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("名單已存在好友");
             }
@@ -227,7 +230,7 @@ public class MemberService {
             memberList.add(String.valueOf(friend.getId()));
             member.setFriendId(memberList);
             save(member);
-            
+
             log.info("MemberService ==> addFriend ........... [ {} ]", "新增好友成功");
             return ResponseEntity.status(HttpStatus.OK).body("新增好友成功");
         } catch (Exception e) {
@@ -235,22 +238,23 @@ public class MemberService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("新增好友失敗");
         }
     }
+
     /*
      * 我的好友
      */
-    public ResponseEntity<List<String>> myFriend(MemberVO memberVO) {
+    public ResponseEntity<List<Map<String, String>>> myFriend(MemberVO memberVO) {
         Member member = findByEmail(memberVO.getLoginEmail());
-        if(member.getFriendId()==null){
-            List<String> usernameList=new ArrayList<>();
-            return ResponseEntity.status(HttpStatus.OK).body(usernameList);
-        }else{
-            List<String> memberList = member.getFriendId();
-            List<String> usernameList=new ArrayList<>();
-            for(String m:memberList){
-                usernameList.add(findById(Integer.parseInt(m)).get().getUsername());
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(usernameList);
+        List<String> memberList = member.getFriendId();
+        List<Map<String,String>> myList=new ArrayList<>();
+        for (String m : memberList) {
+            Map<String, String> map = new LinkedHashMap<String,String>();
+            Optional<Member> friend = findById(Integer.parseInt(memberList.get(memberList.indexOf(m))));
+            map.put("id", String.valueOf(friend.get().getId()));
+            map.put("username", friend.get().getUsername());
+            myList.add(map);
         }
+
+        return ResponseEntity.status(HttpStatus.OK).body(myList);
 
     }
 
