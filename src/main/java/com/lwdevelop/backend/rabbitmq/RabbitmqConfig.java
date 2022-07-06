@@ -1,30 +1,31 @@
-package com.lwdevelop.backend.rabbitmq;
+/* package com.lwdevelop.backend.rabbitmq;
 
-import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 
 @Configuration
 public class RabbitmqConfig {
 
-  private String url="moose.rmq.cloudamqp.com";
-  private String username="vexfecmf";
-  private String password="5kn7ylP6hqOX0aydtWJXvx-_a6KNox1_";
-  public static final String PRESS_EXCHANGE="press_exchange";
-  @Bean
-  Queue directQueue(){
-    return new Queue(PRESS_EXCHANGE, true);
-  }
+  private static final String url="amqps://vexfecmf:5kn7ylP6hqOX0aydtWJXvx-_a6KNox1_@moose.rmq.cloudamqp.com/vexfecmf";
 
-  public Connection getConn() throws InterruptedException {
-    CachingConnectionFactory connectionFactory = new CachingConnectionFactory(url);
-    Connection connection=null;
+  private static final String username="vexfecmf";
+  private static final String password="5kn7ylP6hqOX0aydtWJXvx-_a6KNox1_";
+  private static final String virtualHost="vexfecmf";
+  private static final String Hosts="moose.rmq.cloudamqp.com";
+  private static final String PRESS_EXCHANGE="press_exchange";
+
+
+  public static Connection getConnection(){
+    CachingConnectionFactory connectionFactory=new CachingConnectionFactory(Hosts);
     connectionFactory.setUsername(username);
     connectionFactory.setPassword(password);
-    connectionFactory.setVirtualHost(username);
-    connection=connectionFactory.createConnection();
+    connectionFactory.setVirtualHost(virtualHost);
+    connectionFactory.setRequestedHeartBeat(30);
+    connectionFactory.setConnectionTimeout(30000);
+    Connection connection = connectionFactory.createConnection();
     return connection;
   }
 }
+ */
