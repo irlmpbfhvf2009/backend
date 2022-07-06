@@ -79,12 +79,20 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- rabbitmq -->
-		<!--   <dependency>
+		  <dependency>
 			<groupId>org.springframework.amqp</groupId>
 			<artifactId>spring-rabbit</artifactId>
 			<version>1.4.5.RELEASE</version>
-		  </dependency> -->
+		  </dependency>
+		  <dependency>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>5.10.0</version>
+			<scope>compile</scope>
+		  </dependency>
+
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
