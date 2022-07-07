@@ -7,7 +7,7 @@
 
 第一天：
   1. 項目初始環境搭建 git + heroku
-  2. clearDB、RabbitMQ配置
+  2. clearDB、RabbitMQ、Redis 配置
   2. springboot + mysql 
   3. vue3 + VueCli
 
@@ -29,8 +29,8 @@
   6. 後端密碼檢驗功能
   
 第六天：
-  1. 前端好友功能
-  2. 後端好友相關API
+  1. 新增好友功能
+  2. 聊天功能
   
 第七天:
   1. 
