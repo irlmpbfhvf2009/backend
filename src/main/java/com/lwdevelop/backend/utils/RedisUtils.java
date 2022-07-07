@@ -36,16 +36,26 @@ public class RedisUtils {
 
     public void addFriend(String key, String id, String username) {
         if (getFriend(key)==null) {
+            String str = id+":"+username;
+            jedis.set(key, str);
+        } else {
+            String data = jedis.get(key);
+            jedis.del(key);
+            String str = data+","+id+":"+username;
+            jedis.set(key, str);
+        }
+    }
+/*     public void addFriend(String key, String id, String username) {
+        if (getFriend(key)==null) {
             String jsonStr = "{\"" + id + "\":\"" + username + "\"}";
             jedis.set(key, jsonStr);
         } else {
             String data = jedis.get(key);
             jedis.del(key);
-            // {"id":"email"}
             String jsonStr = data.substring(0, data.length() - 1) + ",\"" + id + "\":\"" + username + "\"}";
             jedis.set(key, jsonStr);
         }
-    }
+    } */
 
     public void delFriend(String key) {
         jedis.del(key);

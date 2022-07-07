@@ -209,7 +209,7 @@ public class MemberService {
         try {
             Member member = findByEmail(memberVO.getLoginEmail());
             Member friend = findByEmail(memberVO.getEmail());
-            
+
             if (member == null) {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "請先登入");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("請先登入");
@@ -235,7 +235,7 @@ public class MemberService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("名單已存在好友");
             }
 
-            redisUtils.addFriend(memberEmail, friendId,friend.getUsername());
+            redisUtils.addFriend(memberEmail, friendId, friend.getUsername());
             memberList.add(friendId);
             member.setFriendId(memberList);
             save(member);
@@ -252,14 +252,28 @@ public class MemberService {
      * 我的好友
      */
     public ResponseEntity<List<Map<String, String>>> myFriend(MemberVO memberVO) {
-        Member member = findByEmail(memberVO.getLoginEmail());
-        List<String> memberList = member.getFriendId();
-        List<Map<String,String>> myList=new ArrayList<>();
-        for (String m : memberList) {
-            Map<String, String> map = new LinkedHashMap<String,String>();
-            Optional<Member> friend = findById(Integer.parseInt(memberList.get(memberList.indexOf(m))));
-            map.put("id", String.valueOf(friend.get().getId()));
-            map.put("username", friend.get().getUsername());
+        /*
+         * Member member = findByEmail(memberVO.getLoginEmail());
+         * List<String> memberList = member.getFriendId();
+         * List<Map<String,String>> myList=new ArrayList<>();
+         * for (String m : memberList) {
+         * Map<String, String> map = new LinkedHashMap<String,String>();
+         * Optional<Member> friend =
+         * findById(Integer.parseInt(memberList.get(memberList.indexOf(m))));
+         * map.put("id", String.valueOf(friend.get().getId()));
+         * map.put("username", friend.get().getUsername());
+         * myList.add(map);
+         * }
+         */
+
+        List<Map<String, String>> myList = new ArrayList<>();
+        String friends = redisUtils.getFriend(memberVO.getLoginEmail());
+        String[] friend = friends.split(",");
+
+        for (int i = 0; i < friend.length; i++) {
+            Map<String, String> map = new LinkedHashMap<String, String>();
+            map.put("id",friend[i].split(":")[0]);
+            map.put("username",friend[i].split(":")[1]);
             myList.add(map);
         }
 
