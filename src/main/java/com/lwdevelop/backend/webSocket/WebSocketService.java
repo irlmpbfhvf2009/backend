@@ -32,24 +32,24 @@ public class WebSocketService {
     // 連接建立成功的調用方法
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username,
-                                        @PathParam("friendName") String friendName) {
+            @PathParam("friendName") String friendName) {
         if (!webSocketMap.containsKey(username)) {
             addOnlineCount(); // 連接數+1
         }
         this.session = session;
         this.username = username;
-        this.friendName=friendName;
+        this.friendName = friendName;
         WebSocketClient client = new WebSocketClient();
         client.setSession(session);
         client.setUrl(session.getRequestURI().toString());
         webSocketMap.put(username, client);
 
-        try {
-            sendMessage(""); //來自後台的反饋: 連接成功
+        /* try {
+            sendMessage(""); // 來自後台的反饋: 連接成功
         } catch (IOException e) {
             log.error("用戶:" + username, "網路異常");
-        }
-        log.info("用戶連接:{} 好友名字{}, 當前在線人數為:{}", username,friendName, getOnlineCount());
+        } */
+        log.info("私人聊天室開啟  用戶:{} 好友{}, 在線人數為:{}", username, friendName, getOnlineCount());
     }
 
     @OnClose
@@ -65,14 +65,10 @@ public class WebSocketService {
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        log.info("收到用戶消息:{} , 傳送給用戶:{} , 報文:{} ", username, friendName,message);
+        log.info("用戶{}私訊用戶{}  內容:{} ", username, friendName, message);
 
         try {
-            /* sendMessage(username,message); */
-            sendMessage(username,friendName,message);
-
-
-
+            sendMessage(username, friendName, message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,14 +94,14 @@ public class WebSocketService {
     }
 
     // 向指定客戶端發送消息
-    public static void sendMessage(String username, String friendName , String message) {
+    public static void sendMessage(String username, String friendName, String message) {
         try {
             WebSocketClient webSocketClient = webSocketMap.get(username);
             WebSocketClient webSocketClientfriendName = webSocketMap.get(friendName);
             if (webSocketClient != null) {
                 webSocketClient.getSession().getBasicRemote().sendText(message);
             }
-            if(webSocketClientfriendName!=null){
+            if (webSocketClientfriendName != null) {
                 webSocketClientfriendName.getSession().getBasicRemote().sendText(message);
             }
         } catch (IOException e) {
