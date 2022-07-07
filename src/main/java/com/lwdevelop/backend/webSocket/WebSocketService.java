@@ -9,12 +9,11 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
-@ServerEndpoint(value = "/websocket/{username}")
+@ServerEndpoint(value = "/websocket/{username}/{friendName}")
 @Component
 @Slf4j
 public class WebSocketService {
@@ -27,73 +26,89 @@ public class WebSocketService {
 
     // 與客戶端連接會話 通過他給客戶端發送數據
     private Session session;
-    // 接收用戶名
     private String username = "";
+    private String friendName = "";
 
     // 連接建立成功的調用方法
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username) {
+    public void onOpen(Session session, @PathParam("username") String username,
+                                        @PathParam("friendName") String friendName) {
         if (!webSocketMap.containsKey(username)) {
             addOnlineCount(); // 連接數+1
         }
-        this.session=session;
-        this.username=username;
+        this.session = session;
+        this.username = username;
+        this.friendName=friendName;
         WebSocketClient client = new WebSocketClient();
         client.setSession(session);
         client.setUrl(session.getRequestURI().toString());
-        webSocketMap.put(username,client);
-        
-        log.info("用戶連接:{}  , 當前在線人數為:{}",username,getOnlineCount());
-        try{
-            sendMessage("來自後台的反饋: 連接成功");
-        }catch(IOException e){
-            log.error("用戶:"+username, "網路異常");
+        webSocketMap.put(username, client);
+
+        try {
+            sendMessage(""); //來自後台的反饋: 連接成功
+        } catch (IOException e) {
+            log.error("用戶:" + username, "網路異常");
         }
+        log.info("用戶連接:{} 好友名字{}, 當前在線人數為:{}", username,friendName, getOnlineCount());
     }
 
     @OnClose
-    public void onClose(){
-        if(webSocketMap.containsKey(username)){
-            webSocketMap.remove(username);
-            if(webSocketMap.size()>0){
+    public void onClose() {
+        if (webSocketMap.containsKey(username)) {
+            if (webSocketMap.size() > 0) {
                 subOnlineCount();
             }
+            webSocketMap.remove(username);
         }
-        log.info("{}用戶退出,當前在線人數為:{}",username,getOnlineCount());
+        log.info("{}用戶退出,當前在線人數為:{}", username, getOnlineCount());
     }
 
     @OnMessage
-    public void onMessage(String message,Session session){
-        log.info("收到用戶消息:{} , 報文:",username,message);
+    public void onMessage(String message, Session session) {
+        log.info("收到用戶消息:{} , 傳送給用戶:{} , 報文:{} ", username, friendName,message);
+
+        try {
+            /* sendMessage(username,message); */
+            sendMessage(username,friendName,message);
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // 可以群發消息
         // 消息保存到數據庫<redis>
-        if(StringUtils.isNotBlank(message)){
+        if (StringUtils.isNotBlank(message)) {
 
         }
     }
 
     @OnError
-    public void OnError(Session session,Throwable error){
-        log.error("用戶錯誤:"+this.username, ",原因:"+error.getMessage());
+    public void OnError(Session session, Throwable error) {
+        log.error("用戶錯誤:" + this.username, ",原因:" + error.getMessage());
         error.printStackTrace();
     }
 
     // 連接服務器成功後主動推送
-    public void sendMessage(String message) throws IOException{
-        synchronized(session){
+    public void sendMessage(String message) throws IOException {
+        synchronized (session) {
             this.session.getBasicRemote().sendText(message);
         }
     }
 
     // 向指定客戶端發送消息
-    public static void sendMessage (String username,String message){
-        try{
+    public static void sendMessage(String username, String friendName , String message) {
+        try {
             WebSocketClient webSocketClient = webSocketMap.get(username);
-            if(webSocketClient!=null){
+            WebSocketClient webSocketClientfriendName = webSocketMap.get(friendName);
+            if (webSocketClient != null) {
                 webSocketClient.getSession().getBasicRemote().sendText(message);
             }
-        }catch(IOException e){
+            if(webSocketClientfriendName!=null){
+                webSocketClientfriendName.getSession().getBasicRemote().sendText(message);
+            }
+        } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
