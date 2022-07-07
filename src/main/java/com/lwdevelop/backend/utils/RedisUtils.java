@@ -1,20 +1,18 @@
-package com.lwdevelop.backend.redis;
+package com.lwdevelop.backend.utils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import org.springframework.context.annotation.Configuration;
-
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
-@Configuration
-public class RedisConfig {
+@Component
+public class RedisUtils {
 
     private static final String url = "redis://default:7zn3XT0HIykqPOgGQKRwYqZajQ9QqbFR@redis-16063.c9.us-east-1-4.ec2.cloud.redislabs.com:16063";
-    
+
     public JedisPool getPool() {
         try {
             URI redisUri = new URI(url);
@@ -23,7 +21,7 @@ public class RedisConfig {
                     redisUri.getPort(),
                     Protocol.DEFAULT_TIMEOUT,
                     redisUri.getUserInfo().split(":", 2)[1]);
-                    return pool;
+            return pool;
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -32,11 +30,24 @@ public class RedisConfig {
 
     private Jedis jedis = getPool().getResource();
 
-    public void setRedisData(String key,String value){
-        jedis.set(key, value);
+    public String getFriend(String key) {
+        return jedis.get(key);
     }
 
-    public void delRedisData(String key){
+    public void addFriend(String key, String id, String username) {
+        if (getFriend(key)==null) {
+            String jsonStr = "{\"" + id + "\":\"" + username + "\"}";
+            jedis.set(key, jsonStr);
+        } else {
+            String data = jedis.get(key);
+            jedis.del(key);
+            // {"id":"email"}
+            String jsonStr = data.substring(0, data.length() - 1) + ",\"" + id + "\":\"" + username + "\"}";
+            jedis.set(key, jsonStr);
+        }
+    }
+
+    public void delFriend(String key) {
         jedis.del(key);
     }
 

@@ -17,6 +17,7 @@ import com.lwdevelop.backend.repository.MemberRepository;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.utils.CommUtils;
 import com.lwdevelop.backend.utils.JwtUtils;
+import com.lwdevelop.backend.utils.RedisUtils;
 import com.lwdevelop.backend.vo.MemberVO;
 import com.lwdevelop.backend.vo.SearchFriendVO;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,9 @@ public class MemberService {
 
     @Autowired
     MemberUserDetailsService memberUserDetailsService;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     public Optional<Member> findById(Integer id) {
         return memberRepository.findById(id);
@@ -205,7 +209,7 @@ public class MemberService {
         try {
             Member member = findByEmail(memberVO.getLoginEmail());
             Member friend = findByEmail(memberVO.getEmail());
-
+            
             if (member == null) {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "請先登入");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("請先登入");
@@ -214,7 +218,11 @@ public class MemberService {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "用戶不存在");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用戶不存在");
             }
-            if (member.getEmail().equals(friend.getEmail())) {
+
+            String memberEmail = member.getEmail();
+            String friendEmail = friend.getEmail();
+            String friendId = String.valueOf(friend.getId());
+            if (memberEmail.equals(friendEmail)) {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "不能新增自己為好友");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不能新增自己為好友");
             }
@@ -222,12 +230,13 @@ public class MemberService {
             if (memberList == null) {
                 memberList = new ArrayList<>();
             }
-            if (memberList.contains(String.valueOf(friend.getId()))) {
+            if (memberList.contains(friendId)) {
                 log.info("MemberService ==> addFriend ........... [ {} ]", "名單已存在好友");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("名單已存在好友");
             }
 
-            memberList.add(String.valueOf(friend.getId()));
+            redisUtils.addFriend(memberEmail, friendId,friend.getUsername());
+            memberList.add(friendId);
             member.setFriendId(memberList);
             save(member);
 
