@@ -2,7 +2,6 @@ package com.lwdevelop.backend.controller;
 
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,11 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.lwdevelop.backend.entity.Member;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.vo.MemberVO;
-import com.lwdevelop.backend.vo.SearchFriendVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -66,12 +63,12 @@ public class MemberController {
     /*
      * 還未開發
      */
-    @ApiOperation("搜尋好友")
+   /*  @ApiOperation("搜尋好友")
     @PostMapping(path = "/searchFriend")
     public ResponseEntity<ResponseEntity<List<String>>> searchFriend(@RequestBody SearchFriendVO searchFriendVO)throws Exception{
     	log.info("MemberController ==> searchFriend ........... 搜尋好友 [ {} ]",searchFriendVO.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(memberService.searchFriend(searchFriendVO));
-    }
+    } */
 
     @ApiOperation("新增好友")
     @PostMapping(path = "/addFriend")

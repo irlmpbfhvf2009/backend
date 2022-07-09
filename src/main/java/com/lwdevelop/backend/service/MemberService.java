@@ -19,7 +19,6 @@ import com.lwdevelop.backend.utils.CommUtils;
 import com.lwdevelop.backend.utils.JwtUtils;
 import com.lwdevelop.backend.utils.RedisUtils;
 import com.lwdevelop.backend.vo.MemberVO;
-import com.lwdevelop.backend.vo.SearchFriendVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,7 +46,7 @@ public class MemberService {
         return memberRepository.findByPassword(password);
     }
 
-    public List<Member> findByUsername(String username) {
+    public Member findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
 
@@ -90,11 +89,17 @@ public class MemberService {
         }
 
         log.info("MemberService ==> register ... 檢查會員是否已經存在 [ {} ]", email);
-        Member memberEmail = findByEmail(email);
+        Member userEmail = findByEmail(email);
+        Member userName = findByUsername(username);
 
-        if (memberEmail != null) {
+        if (userEmail != null) {
             log.info("MemberService ==> register ........... [ {} ]", "用戶已經存在");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用戶已經存在");
+        }
+
+        if (userName != null) {
+            log.info("MemberService ==> register ........... [ {} ] {}", username, "用戶名已經存在");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用戶名已經存在");
         }
 
         try {
@@ -185,9 +190,9 @@ public class MemberService {
     }
 
     /*
-     * 搜尋好友
+     * 搜尋好友(未开发)
      */
-    public ResponseEntity<List<String>> searchFriend(SearchFriendVO searchFriendVO) {
+    /* public ResponseEntity<List<String>> searchFriend(SearchFriendVO searchFriendVO) {
         List<Member> memberList = findByUsername(searchFriendVO.getUsername());
         List<String> usernameList = new ArrayList<>();
         for (Member list : memberList) {
@@ -200,7 +205,7 @@ public class MemberService {
             log.info("Member237Service ==> searchFriend Exception: {}", e.toString());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(usernameList);
         }
-    }
+    } */
 
     /*
      * 新增好友
@@ -268,13 +273,14 @@ public class MemberService {
 
         List<Map<String, String>> myList = new ArrayList<>();
         String friends = redisUtils.getFriend(memberVO.getLoginEmail());
-        String[] friend = friends.split(",");
-
-        for (int i = 0; i < friend.length; i++) {
-            Map<String, String> map = new LinkedHashMap<String, String>();
-            map.put("id",friend[i].split(":")[0]);
-            map.put("username",friend[i].split(":")[1]);
-            myList.add(map);
+        if (friends != null) {
+            String[] friend = friends.split(",");
+            for (int i = 0; i < friend.length; i++) {
+                Map<String, String> map = new LinkedHashMap<String, String>();
+                map.put("id", friend[i].split(":")[0]);
+                map.put("username", friend[i].split(":")[1]);
+                myList.add(map);
+            }
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(myList);
