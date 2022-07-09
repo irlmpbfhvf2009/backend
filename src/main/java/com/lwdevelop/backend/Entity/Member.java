@@ -37,6 +37,9 @@ public class Member implements UserDetails {
     @Column(nullable = false, length = 30)
     private String username;
 
+    private String gender; // 性別
+    private Integer age; // 年齡
+
     private String platform; // 行動裝置
     private Boolean enable; // 是否啟用
     private String regIp; // 註冊IP
