@@ -21,6 +21,8 @@ public class MemberVO {
     private String gender;
     @ApiModelProperty(value = "年齡", required = true)
     private Integer age;
+    @ApiModelProperty(value = "星座", required = true)
+    private String constellation;
     @ApiModelProperty(value = "令牌", required = true)
     private String token;
     @ApiModelProperty(value = "登入信箱",required = true)

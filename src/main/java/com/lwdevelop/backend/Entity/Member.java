@@ -39,6 +39,7 @@ public class Member implements UserDetails {
 
     private String gender; // 性別
     private Integer age; // 年齡
+    private String constellation; // 星座
 
     private String platform; // 行動裝置
     private Boolean enable; // 是否啟用
