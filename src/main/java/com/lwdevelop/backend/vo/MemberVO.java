@@ -27,7 +27,7 @@ public class MemberVO {
     private String token;
     @ApiModelProperty(value = "登入信箱", required = true)
     private String loginEmail;
-    
+
     @ApiModelProperty(value = "身高", required = true)
     private Integer height;
     @ApiModelProperty(value = "體重", required = true)
@@ -43,7 +43,7 @@ public class MemberVO {
     @ApiModelProperty(value = "職業類別", required = true)
     private String profession; 
     @ApiModelProperty(value = "學歷", required = true)
-    private String Education;
+    private String education;
     @ApiModelProperty(value = "語言", required = true)
     private String language;
     @ApiModelProperty(value = "是否有抽菸", required = true)
