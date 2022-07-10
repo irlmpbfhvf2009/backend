@@ -112,6 +112,8 @@ public class MemberService {
             member.setRoles(roles);
             member.setPlatform(CommUtils.getClientDevice(request));
             member.setEnable(true);
+            member.setGender(memberVO.getGender());
+            member.setAge(memberVO.getAge());
             member.setRegIp(CommUtils.getClientIP(request));
             member.setLastLoginIP(CommUtils.getClientIP(request));
             saveFlush(member);
