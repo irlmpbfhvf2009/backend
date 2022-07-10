@@ -113,6 +113,7 @@ public class MemberService {
             member.setPlatform(CommUtils.getClientDevice(request));
             member.setEnable(true);
             member.setGender(memberVO.getGender());
+            member.setConstellation(memberVO.getConstellation());
             member.setAge(memberVO.getAge());
             member.setRegIp(CommUtils.getClientIP(request));
             member.setLastLoginIP(CommUtils.getClientIP(request));
