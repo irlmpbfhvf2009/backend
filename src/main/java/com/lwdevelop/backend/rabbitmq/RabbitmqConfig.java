@@ -1,13 +1,14 @@
-/* package com.lwdevelop.backend.rabbitmq;
+package com.lwdevelop.backend.rabbitmq;
 
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
 public class RabbitmqConfig {
-
+  
   private static final String url="amqps://vexfecmf:5kn7ylP6hqOX0aydtWJXvx-_a6KNox1_@moose.rmq.cloudamqp.com/vexfecmf";
 
   private static final String username="vexfecmf";
@@ -28,4 +29,3 @@ public class RabbitmqConfig {
     return connection;
   }
 }
- */

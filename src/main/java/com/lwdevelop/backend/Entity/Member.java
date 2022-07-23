@@ -41,6 +41,10 @@ public class Member implements UserDetails {
     private Integer age; // 年齡
     private String constellation; // 星座
 
+    private Byte[] avatarName; // 大頭貼檔名
+    private Byte[] avatarData; // 大頭貼資料
+
+
     private Integer height;// 身高
     private Integer weight;// 體重
     private String bodyType;// 體型 平均 苗條 運動 曲線 微胖 豐滿
