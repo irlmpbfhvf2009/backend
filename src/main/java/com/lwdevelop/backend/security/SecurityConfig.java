@@ -57,7 +57,7 @@ public class SecurityConfig {
                 .addFilterBefore(JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/","/user/**","/websocket/**").permitAll()
+                .antMatchers("/","/user/**","/websocket/**","/avatar/**").permitAll()
                 .antMatchers("/favicon.ico", "/static/**","/swagger-ui/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers(AUTH_LIST).permitAll()
