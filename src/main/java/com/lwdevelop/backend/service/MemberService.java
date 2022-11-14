@@ -17,7 +17,6 @@ import com.lwdevelop.backend.repository.MemberRepository;
 import com.lwdevelop.backend.service.MemberService;
 import com.lwdevelop.backend.utils.CommUtils;
 import com.lwdevelop.backend.utils.JwtUtils;
-import com.lwdevelop.backend.utils.RedisUtils;
 import com.lwdevelop.backend.vo.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,9 +29,6 @@ public class MemberService {
 
     @Autowired
     MemberUserDetailsService memberUserDetailsService;
-
-    @Autowired
-    RedisUtils redisUtils;
 
     public Optional<Member> findById(Integer id) {
         return memberRepository.findById(id);
@@ -243,7 +239,6 @@ public class MemberService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("名單已存在好友");
             }
 
-            redisUtils.addFriend(memberEmail, friendId, friend.getUsername());
             memberList.add(friendId);
             member.setFriendId(memberList);
             save(member);
@@ -260,21 +255,21 @@ public class MemberService {
      * 我的好友
      */
     public ResponseEntity<List<Map<String, String>>> myFriend(MemberVO memberVO) {
-        /*
-         * Member member = findByEmail(memberVO.getLoginEmail());
-         * List<String> memberList = member.getFriendId();
-         * List<Map<String,String>> myList=new ArrayList<>();
-         * for (String m : memberList) {
-         * Map<String, String> map = new LinkedHashMap<String,String>();
-         * Optional<Member> friend =
-         * findById(Integer.parseInt(memberList.get(memberList.indexOf(m))));
-         * map.put("id", String.valueOf(friend.get().getId()));
-         * map.put("username", friend.get().getUsername());
-         * myList.add(map);
-         * }
-         */
+        
+        Member member = findByEmail(memberVO.getLoginEmail());
+        List<String> memberList = member.getFriendId();
+        List<Map<String,String>> myList=new ArrayList<>();
+        for (String m : memberList) {
+        Map<String, String> map = new LinkedHashMap<String,String>();
+        Optional<Member> friend =
+        findById(Integer.parseInt(memberList.get(memberList.indexOf(m))));
+        map.put("id", String.valueOf(friend.get().getId()));
+        map.put("username", friend.get().getUsername());
+        myList.add(map);
+        }
+        
 
-        List<Map<String, String>> myList = new ArrayList<>();
+/*         List<Map<String, String>> myList = new ArrayList<>();
         String friends = redisUtils.getFriend(memberVO.getLoginEmail());
         if (friends != null) {
             String[] friend = friends.split(",");
@@ -284,7 +279,7 @@ public class MemberService {
                 map.put("username", friend[i].split(":")[1]);
                 myList.add(map);
             }
-        }
+        } */
 
         return ResponseEntity.status(HttpStatus.OK).body(myList);
 
