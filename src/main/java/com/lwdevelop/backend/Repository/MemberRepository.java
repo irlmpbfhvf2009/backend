@@ -1,8 +1,10 @@
-package com.lwdevelop.backend.repository;
+package com.lwdevelop.backend.Repository;
+
+/* package com.lwdevelop.backend.repository; */
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.lwdevelop.backend.entity.Member;
+import com.lwdevelop.backend.Entity.Member;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member,Integer> {

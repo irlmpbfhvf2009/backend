@@ -1,4 +1,4 @@
-package com.lwdevelop.backend.entity;
+package com.lwdevelop.backend.Entity;
 
 import java.util.Collection;
 import java.util.Date;
