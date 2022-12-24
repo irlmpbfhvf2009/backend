@@ -1,7 +1,5 @@
 package com.lwdevelop.backend.controller;
 
-import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,29 +58,6 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(memberService.memberLogin(request, memberVO));
     }
 
-    /*
-     * 還未開發
-     */
-   /*  @ApiOperation("搜尋好友")
-    @PostMapping(path = "/searchFriend")
-    public ResponseEntity<ResponseEntity<List<String>>> searchFriend(@RequestBody SearchFriendVO searchFriendVO)throws Exception{
-    	log.info("MemberController ==> searchFriend ........... 搜尋好友 [ {} ]",searchFriendVO.getUsername());
-        return ResponseEntity.status(HttpStatus.OK).body(memberService.searchFriend(searchFriendVO));
-    } */
-
-    @ApiOperation("新增好友")
-    @PostMapping(path = "/addFriend")
-    public ResponseEntity<ResponseEntity<String>> addFriend(@RequestBody MemberVO memberVO)throws Exception{
-    	log.info("MemberController ==> addFriend ........... 新增好友 [ {} 加入 {} ]",memberVO.getLoginEmail(),memberVO.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(memberService.addFriend(memberVO));
-    }
-
-    @ApiOperation("我的好友")
-    @PostMapping(path = "/myFriend")
-    public ResponseEntity<ResponseEntity<List<Map<String, String>>>> myFriend(HttpServletRequest request, 
-                                                    @RequestBody MemberVO memberVO)throws Exception{
-        return ResponseEntity.status(HttpStatus.OK).body(memberService.myFriend(memberVO));
-    }
     
 
 }

@@ -75,9 +75,9 @@ public class Member implements UserDetails {
     @LastModifiedDate
     private Date updateTime;
     
-    @Column
-    @Convert(converter = StringListConverter.class)
-    private List<String> friendId; // 好友名单
+    //@Column
+    //@Convert(converter = StringListConverter.class)
+    //#private List<String> friendId; // 好友名单
 
 
     @Override

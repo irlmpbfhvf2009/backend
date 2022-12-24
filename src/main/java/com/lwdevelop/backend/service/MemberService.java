@@ -1,10 +1,7 @@
 package com.lwdevelop.backend.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,103 +183,6 @@ public class MemberService {
         String email = token.verifyToken(memberVO.getToken());
         Member member = findByEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(member);
-    }
-
-    /*
-     * 搜尋好友(未开发)
-     */
-    /* public ResponseEntity<List<String>> searchFriend(SearchFriendVO searchFriendVO) {
-        List<Member> memberList = findByUsername(searchFriendVO.getUsername());
-        List<String> usernameList = new ArrayList<>();
-        for (Member list : memberList) {
-            usernameList.add(memberList.get(memberList.indexOf(list)).getUsername());
-        }
-        try {
-            log.info("MemberService ==> searchFriend ........... [ {} ]", searchFriendVO.getUsername());
-            return ResponseEntity.status(HttpStatus.OK).body(usernameList);
-        } catch (Exception e) {
-            log.info("Member237Service ==> searchFriend Exception: {}", e.toString());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(usernameList);
-        }
-    } */
-
-    /*
-     * 新增好友
-     */
-    public ResponseEntity<String> addFriend(MemberVO memberVO) {
-        try {
-            Member member = findByEmail(memberVO.getLoginEmail());
-            Member friend = findByEmail(memberVO.getEmail());
-
-            if (member == null) {
-                log.info("MemberService ==> addFriend ........... [ {} ]", "請先登入");
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("請先登入");
-            }
-            if (friend == null) {
-                log.info("MemberService ==> addFriend ........... [ {} ]", "用戶不存在");
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("用戶不存在");
-            }
-
-            String memberEmail = member.getEmail();
-            String friendEmail = friend.getEmail();
-            String friendId = String.valueOf(friend.getId());
-            if (memberEmail.equals(friendEmail)) {
-                log.info("MemberService ==> addFriend ........... [ {} ]", "不能新增自己為好友");
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不能新增自己為好友");
-            }
-            List<String> memberList = member.getFriendId();
-            if (memberList == null) {
-                memberList = new ArrayList<>();
-            }
-            if (memberList.contains(friendId)) {
-                log.info("MemberService ==> addFriend ........... [ {} ]", "名單已存在好友");
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("名單已存在好友");
-            }
-
-            memberList.add(friendId);
-            member.setFriendId(memberList);
-            save(member);
-
-            log.info("MemberService ==> addFriend ........... [ {} ]", "新增好友成功");
-            return ResponseEntity.status(HttpStatus.OK).body("新增好友成功");
-        } catch (Exception e) {
-            log.info("Member237Service ==> addFriend Exception: {}", e.toString());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("新增好友失敗");
-        }
-    }
-
-    /*
-     * 我的好友
-     */
-    public ResponseEntity<List<Map<String, String>>> myFriend(MemberVO memberVO) {
-        
-        Member member = findByEmail(memberVO.getLoginEmail());
-        List<String> memberList = member.getFriendId();
-        List<Map<String,String>> myList=new ArrayList<>();
-        for (String m : memberList) {
-        Map<String, String> map = new LinkedHashMap<String,String>();
-        Optional<Member> friend =
-        findById(Integer.parseInt(memberList.get(memberList.indexOf(m))));
-        map.put("id", String.valueOf(friend.get().getId()));
-        map.put("username", friend.get().getUsername());
-        myList.add(map);
-        }
-        
-
-/*         List<Map<String, String>> myList = new ArrayList<>();
-        String friends = redisUtils.getFriend(memberVO.getLoginEmail());
-        if (friends != null) {
-            String[] friend = friends.split(",");
-            for (int i = 0; i < friend.length; i++) {
-                Map<String, String> map = new LinkedHashMap<String, String>();
-                map.put("id", friend[i].split(":")[0]);
-                map.put("username", friend[i].split(":")[1]);
-                myList.add(map);
-            }
-        } */
-
-        return ResponseEntity.status(HttpStatus.OK).body(myList);
-
     }
 
 }
