@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import com.lwdevelop.backend.entity.Member;
-import com.lwdevelop.backend.repository.MemberRepository;
+import com.lwdevelop.backend.Entity.Member;
+import com.lwdevelop.backend.Repository.MemberRepository;
 
 @Service
 public class MemberUserDetailsService implements UserDetailsService {
