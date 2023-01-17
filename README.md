@@ -1,5 +1,10 @@
 # backend
 
+KEY f429db3a-6adc-49cb-b4ad-50546e1f1d61
+
+git remote add heroku https://...
+git push heroku master
+
 項目介紹：
 基于 Springboot2.7.1 + Vue3 開發的系統
 
