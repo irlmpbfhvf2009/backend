@@ -1,4 +1,4 @@
-package com.lwdevelop.backend.Entity;
+package com.lwdevelop.backend.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

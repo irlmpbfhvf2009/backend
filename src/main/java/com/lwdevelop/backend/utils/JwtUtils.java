@@ -3,7 +3,9 @@ package com.lwdevelop.backend.utils;
 import java.util.Date;
 import javax.xml.bind.DatatypeConverter;
 import org.springframework.stereotype.Component;
-import com.lwdevelop.backend.Entity.Member;
+
+import com.lwdevelop.backend.entity.Member;
+
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 
